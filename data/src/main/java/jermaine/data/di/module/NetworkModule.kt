@@ -1,10 +1,11 @@
 package jermaine.data.di.module
 
-import android.content.Context
+import android.app.Application
 import dagger.Module
 import dagger.Provides
 import jermaine.data.R
 import jermaine.data.articles.ApiService
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -13,18 +14,26 @@ import javax.inject.Singleton
 
 
 @Module
-class NetworkModule(val context: Context) {
+class NetworkModule(val app: Application) {
     @Singleton
     @Provides
-    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpCache(): Cache {
+        val cacheSize = (10 * 1024 * 1024).toLong() // 10 MiB
+        return Cache(app.cacheDir, cacheSize)
+    }
+
+    @Singleton
+    @Provides
+    fun providesOkHttpClient(cache: Cache): OkHttpClient = OkHttpClient.Builder()
             .addInterceptor {
                 val original = it.request()
 
                 val requestBuilder = original.newBuilder()
-                        .addHeader("X-Api-Key", context.getString(R.string.news_api_key))
+                        .addHeader("X-Api-Key", app.getString(R.string.news_api_key))
 
                 it.proceed(requestBuilder.build())
             }
+            .cache(cache)
             .build()
 
     @Singleton

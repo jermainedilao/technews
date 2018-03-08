@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_item_card_horizontal_margin">16dp</dimen>
+    <dimen name="list_item_card_vertical_margin">8dp</dimen>
+</resources>

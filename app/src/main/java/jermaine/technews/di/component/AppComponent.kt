@@ -1,5 +1,6 @@
 package jermaine.technews.di.component
 
+import android.app.Application
 import dagger.Component
 import jermaine.data.di.module.NetworkModule
 import jermaine.technews.di.module.*
@@ -20,13 +21,13 @@ import javax.inject.Singleton
 )
 interface AppComponent {
     companion object {
-        fun initialize(): AppComponent =
+        fun initialize(app: Application): AppComponent =
                 DaggerAppComponent.builder()
                         .appModule(AppModule())
                         .repositoryModule(RepositoryModule())
                         .serviceModule(ServiceModule())
                         .useCaseModule(UseCaseModule())
-                        .networkModule(NetworkModule())
+                        .networkModule(NetworkModule(app))
                         .build()
     }
 
