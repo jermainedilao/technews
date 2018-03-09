@@ -2,4 +2,6 @@
 <resources>
     <dimen name="list_item_card_horizontal_margin">16dp</dimen>
     <dimen name="list_item_card_vertical_margin">8dp</dimen>
+
+    <dimen name="text_size_small">10sp</dimen>
 </resources>

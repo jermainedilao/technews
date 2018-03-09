@@ -1,9 +1,13 @@
 package jermaine.technews.ui.articles
 
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import jermaine.domain.articles.model.Article
 import jermaine.technews.R
 import jermaine.technews.ui.base.BaseActivity
@@ -19,14 +23,22 @@ class ArticlesListActivity : BaseActivity() {
     @Inject
     lateinit var viewModel: ArticlesViewModel
 
+    lateinit var compositeDisposable: CompositeDisposable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getComponent().inject(this)
         setContentView(R.layout.activity_articles_list)
 
-        fetchArticles()
+        compositeDisposable = CompositeDisposable()
 
+        fetchArticles()
         setSwipeRefreshListener()
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 
     private fun setSwipeRefreshListener() {
@@ -56,10 +68,26 @@ class ArticlesListActivity : BaseActivity() {
     }
 
     private fun initializeList(articles: List<Article>) {
-        val adapter = ArticlesListAdapter(this, articles)
+        val adapter = ArticlesListAdapter(articles)
         val manager = LinearLayoutManager(this)
+
+        val itemClick = adapter.clickEvent
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    startBrowser(it.url)
+                }
+        compositeDisposable.add(itemClick)
 
         recycler_view.layoutManager = manager
         recycler_view.adapter = adapter
+    }
+
+    private fun startBrowser(url: String) {
+        val builder = CustomTabsIntent.Builder()
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+
+        val intent = builder.build()
+        intent.intent.`package` = "com.android.chrome"
+        intent.launchUrl(this, Uri.parse(url))
     }
 }
