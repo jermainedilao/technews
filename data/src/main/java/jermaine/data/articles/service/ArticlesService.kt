@@ -5,5 +5,5 @@ import jermaine.domain.articles.model.Article
 
 
 interface ArticlesService {
-    fun fetchArticles(): Single<List<Article>>
+    fun fetchArticles(page: Int): Single<List<Article>>
 }
