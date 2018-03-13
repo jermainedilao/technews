@@ -9,7 +9,6 @@ class ArticlesServiceImpl(private val apiService: ApiService) : ArticlesService 
     override fun fetchArticles(page: Int): Single<List<Article>> =
     // mock
     // Single.just(gson.fromJson(Article.getTestData(), object : TypeToken<List<Article>>() {}.type))
-//            apiService.fetchArticles("technology", "us", 10, page)
-            apiService.fetchArticles("techcrunch,techradar", 10, page)
+            apiService.fetchArticles("techcrunch,techradar,the-next-web,wired,the-verge", 10, page)
                     .map { it.articles }
 }

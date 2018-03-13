@@ -39,6 +39,10 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
     api "com.squareup.retrofit2:converter-gson:$gson_converter_version"
     api "com.squareup.retrofit2:adapter-rxjava2:$rxadapter_version"
+
+    // room
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    kapt "android.arch.persistence.room:compiler:1.0.0"
 }
 repositories {
     mavenCentral()
