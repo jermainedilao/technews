@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import io.reactivex.subjects.PublishSubject
 import jermaine.domain.articles.model.Article
 import jermaine.technews.R
+import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
 class ArticlesListAdapter(
         private var articles: MutableList<Article>,
-        private val loadNextPageCallback: LoadNextPageCallback
+        private val onLastItemCallback: OnLastItemCallback
 ) : RecyclerView.Adapter<ArticleViewHolder>() {
     companion object {
         const val LOADER = "LOADER"
@@ -19,6 +20,9 @@ class ArticlesListAdapter(
         const val VIEW_TYPE_LOADER = 1
     }
 
+    /**
+     * Emits the item being clicked from the list view.
+     **/
     val clickEvent: PublishSubject<Article> = PublishSubject.create()
 
     override fun getItemViewType(position: Int): Int {
@@ -52,19 +56,25 @@ class ArticlesListAdapter(
             }
 
             if (position == articles.size - 1) {
-                loadNextPageCallback.onLoadNextPage()
+                onLastItemCallback.onLastItem()
             }
         }
     }
 
     override fun getItemCount(): Int = articles.size
 
+    /**
+     * Replaces the entire list displayed in the list view.
+     **/
     fun newList(articles: List<Article>) {
         this.articles = arrayListOf()
         this.articles.addAll(articles)
         notifyDataSetChanged()
     }
 
+    /**
+     * Appends the new list at the end of the currently displayed list.
+     **/
     fun append(articles: List<Article>) {
         val startPosition = this.articles.size
 
@@ -72,12 +82,26 @@ class ArticlesListAdapter(
         notifyItemRangeInserted(startPosition, articles.size)
     }
 
+    /**
+     * Appends the new article at the end of the currently displayed list.
+     **/
     fun append(article: Article) {
         this.articles.add(article)
         this.notifyItemInserted(this.articles.size - 1)
     }
 
-    fun removeLoader() {
+    /**
+     * Shows pagination indicator at the end of the list.
+     **/
+    fun showPaginateIndicator() {
+        val loader = Article(title = ArticlesListAdapter.LOADER)
+        append(loader)
+    }
+
+    /**
+     * Hides the pagination indicator at the end of the list.
+     **/
+    fun hidePaginateIndicator() {
         val lastItemPos = articles.size - 1
         if (getItemViewType(lastItemPos) == VIEW_TYPE_LOADER) {
             articles.removeAt(lastItemPos)

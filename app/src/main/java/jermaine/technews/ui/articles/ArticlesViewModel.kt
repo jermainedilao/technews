@@ -13,9 +13,26 @@ class ArticlesViewModel(private val fetchArticlesListUseCase: FetchArticlesListU
         val TAG = "ArticlesViewModel"
     }
 
+    /**
+     * Show paginate indicator if emitted value is true.
+     * If false hide refresh paginate.
+     **/
     val paginateIndicator: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
+
+    /**
+     * Show refresh indicator if emitted value is true.
+     * If false hide refresh indicator.
+     **/
     val refreshIndicator: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
 
+    /**
+     * Returns list of articles observable.
+     * This is also responsible to trigger
+     * pageIndicator and refreshIndicator to show or not.
+     *
+     * @see paginateIndicator
+     * @see refreshIndicator
+     **/
     fun fetchArticles(page: Int): Observable<List<Article>> {
         Log.d(TAG, "fetchArticles: ")
         return fetchArticlesListUseCase.execute(page)

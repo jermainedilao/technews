@@ -6,6 +6,9 @@ import jermaine.domain.articles.model.Article
 import jermaine.domain.interactortype.SingleWithParamUseCase
 
 
+/**
+ * Use case responsible for fetching list of articles.
+ **/
 class FetchArticlesListUseCase(private val articlesRepository: ArticlesRepository): SingleWithParamUseCase<Int, List<Article>> {
     override fun execute(page: Int): Single<List<Article>> = articlesRepository.fetchArticles(page)
 }

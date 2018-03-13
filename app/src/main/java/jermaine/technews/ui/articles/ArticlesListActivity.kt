@@ -12,10 +12,11 @@ import io.reactivex.subjects.PublishSubject
 import jermaine.domain.articles.model.Article
 import jermaine.technews.R
 import jermaine.technews.ui.base.BaseActivity
+import jermaine.technews.util.callbacks.OnLastItemCallback
 import kotlinx.android.synthetic.main.activity_articles_list.*
 import javax.inject.Inject
 
-class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
+class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
     companion object {
         val TAG = "ArticlesListActivity"
     }
@@ -26,7 +27,8 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
     private lateinit var compositeDisposable: CompositeDisposable
 
     /**
-     * Subject responsible for fetching lists. Requires "page" as parameter.
+     * Emits new list of articles.
+     * Requires "page" (used for pagination) as parameter.
      **/
     private lateinit var fetchArticles: PublishSubject<Int>
 
@@ -34,6 +36,10 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
      * Page for pagination.
      **/
     private var page: Int = 1
+
+    /**
+     * True, if we should fetch next page. False if not.
+     **/
     private var shouldFetchNextPage: Boolean = true
 
     private lateinit var adapter: ArticlesListAdapter
@@ -50,7 +56,10 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
         setSwipeRefreshListener()
         setLoadingIndicators()
 
-        fetchArticles()
+        initializeFetchArticles()
+
+        // Proceed with fetching first page.
+        fetchArticles.onNext(1)
     }
 
     override fun onDestroy() {
@@ -58,6 +67,9 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
         super.onDestroy()
     }
 
+    /**
+     * Initializes the recycler view boiler plate.
+     **/
     private fun initializeList() {
         adapter = ArticlesListAdapter(arrayListOf(), this)
         val manager = LinearLayoutManager(this)
@@ -73,6 +85,9 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
         recycler_view.adapter = adapter
     }
 
+    /**
+     * Sets swipe refresh listener to swipe refresh layout.
+     **/
     private fun setSwipeRefreshListener() {
         swipe_refresh_layout.setOnRefreshListener {
             // Reset page to 1.
@@ -82,37 +97,46 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
     }
 
     private fun setLoadingIndicators() {
+        /**
+         * Responsible for showing the refresh indicator.
+         **/
         val refreshIndicator = viewModel.refreshIndicator
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     swipe_refresh_layout.isRefreshing = it
                 }
 
+        /**
+         * Responsible for showing the pagination indicator.
+         **/
         val paginateIndicator = viewModel.paginateIndicator
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it) {
                         val lastItemViewType = adapter.getItemViewType(adapter.itemCount - 1)
                         if (lastItemViewType == ArticlesListAdapter.VIEW_TYPE_ARTICLE) {
-                            val loader = Article(title = ArticlesListAdapter.LOADER)
-                            adapter.append(loader)
+                            adapter.showPaginateIndicator()
                         }
                     } else {
-                        adapter.removeLoader()
+                        adapter.hidePaginateIndicator()
                     }
                 }
 
         compositeDisposable.addAll(refreshIndicator, paginateIndicator)
     }
 
-    override fun onLoadNextPage() {
+    override fun onLastItem() {
         if (shouldFetchNextPage) {
-            Log.d(TAG, "onLoadNextPage: ")
+            Log.d(TAG, "onLastItem: ")
             fetchArticles.onNext(++page)
         }
     }
 
-    private fun fetchArticles() {
+    /**
+     * Subscribes fetch articles subject. This method is responsible
+     * for displaying the emitted lists to the view.
+     **/
+    private fun initializeFetchArticles() {
         val disposable = fetchArticles
                 .flatMap {
                     viewModel.fetchArticles(it)
@@ -133,11 +157,13 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
                 })
 
         compositeDisposable.add(disposable)
-
-        // Proceed with fetching first page.
-        fetchArticles.onNext(page)
     }
 
+    /**
+     * Updates the currently displayed list.
+     * If page == 1, replaces the currently displayed list with the new list.
+     * Else, appends the new list at the end of the currently displayed list.
+     **/
     private fun updateList(articles: List<Article>) {
         if (page == 1) {
             adapter.newList(articles)
@@ -146,6 +172,11 @@ class ArticlesListActivity : BaseActivity(), LoadNextPageCallback {
         }
     }
 
+    /**
+     * Starts browser.
+     *
+     * @param url Url to be opened in the browser.
+     **/
     private fun startBrowser(url: String) {
         val builder = CustomTabsIntent.Builder()
         builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
