@@ -1,13 +1,22 @@
 package jermaine.technews.ui.articles
 
 import android.util.Log
+import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import jermaine.domain.articles.interactors.FetchArticlesListUseCase
-import jermaine.domain.articles.model.Article
+import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
+import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
+import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
+import jermaine.technews.ui.articles.model.ArticleViewObject
+import jermaine.technews.ui.articles.util.ViewObjectParser
 
 
-class ArticlesViewModel(private val fetchArticlesListUseCase: FetchArticlesListUseCase) {
+class ArticlesViewModel(
+        private val fetchArticlesListUseCase: FetchArticlesListUseCase,
+        private val bookmarkArticleUseCase: BookmarkArticleUseCase,
+        private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase
+) {
 
     companion object {
         val TAG = "ArticlesViewModel"
@@ -33,10 +42,16 @@ class ArticlesViewModel(private val fetchArticlesListUseCase: FetchArticlesListU
      * @see paginateIndicator
      * @see refreshIndicator
      **/
-    fun fetchArticles(page: Int): Observable<List<Article>> {
+    fun fetchArticles(page: Int): Single<List<ArticleViewObject>> {
         Log.d(TAG, "fetchArticles: ")
         return fetchArticlesListUseCase.execute(page)
-                .toObservable()
+                .flatMapObservable {
+                    Observable.fromIterable(it)
+                }
+                .map{
+                    ViewObjectParser.articleToViewRepresentation(it)
+                }
+                .toList()
                 .doOnSubscribe {
                     // Only show refreshing if fetching first page.
                     if (page == 1) {
@@ -45,7 +60,7 @@ class ArticlesViewModel(private val fetchArticlesListUseCase: FetchArticlesListU
                         paginateIndicator.onNext(true)
                     }
                 }
-                .doOnNext {
+                .doOnSuccess {
                     refreshIndicator.onNext(false)
 
                     if (page != 1) {
@@ -60,4 +75,23 @@ class ArticlesViewModel(private val fetchArticlesListUseCase: FetchArticlesListU
                     }
                 }
     }
+
+    /**
+     * Bookmarks an article.
+     **/
+        fun bookmarkArticle(article: ArticleViewObject): Completable =
+            bookmarkArticleUseCase.execute(article.toDomainRepresentation())
+
+    /**
+     * Returns list of bookmarked articles.
+     **/
+    fun fetchBookmarkedArticles(page: Int): Single<List<ArticleViewObject>> =
+            fetchBookmarkedArticleUseCase.execute(page)
+                    .flatMapObservable {
+                        Observable.fromIterable(it)
+                    }
+                    .map{
+                        ViewObjectParser.articleToViewRepresentation(it)
+                    }
+                    .toList()
 }

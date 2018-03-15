@@ -41,8 +41,11 @@ dependencies {
     api "com.squareup.retrofit2:adapter-rxjava2:$rxadapter_version"
 
     // room
-    implementation "android.arch.persistence.room:runtime:1.0.0"
+    api "android.arch.persistence.room:runtime:1.0.0"
     kapt "android.arch.persistence.room:compiler:1.0.0"
+
+    // rxjava2 support for room
+    api "android.arch.persistence.room:rxjava2:1.0.0"
 }
 repositories {
     mavenCentral()

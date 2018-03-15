@@ -1,7 +1,7 @@
 package jermaine.data.articles
 
 import io.reactivex.Single
-import jermaine.data.articles.service.FetchArticlesApiResponse
+import jermaine.data.articles.service.model.FetchArticlesApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

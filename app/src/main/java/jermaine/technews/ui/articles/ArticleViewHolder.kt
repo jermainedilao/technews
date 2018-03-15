@@ -36,4 +36,17 @@ class ArticleViewHolder(private val context: Context, view: View) : RecyclerView
             itemView.source.text = sourceText
         }
     }
+
+    fun setBookmarkListener(listener: View.OnClickListener) {
+        itemView.bookmark.setOnClickListener(listener)
+    }
+
+    fun setBookmarkIcon(drawableResId: Int) {
+        itemView.bookmark.setCompoundDrawablesWithIntrinsicBounds(
+                drawableResId,
+                0,
+                0,
+                0
+        )
+    }
 }

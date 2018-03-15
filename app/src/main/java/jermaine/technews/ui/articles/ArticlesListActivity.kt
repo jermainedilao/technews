@@ -1,17 +1,21 @@
 package jermaine.technews.ui.articles
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import jermaine.domain.articles.model.Article
 import jermaine.technews.R
+import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.base.BaseActivity
+import jermaine.technews.ui.bookmarks.BookmarksListActivity
 import jermaine.technews.util.callbacks.OnLastItemCallback
 import kotlinx.android.synthetic.main.activity_articles_list.*
 import javax.inject.Inject
@@ -79,10 +83,25 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
                 .subscribe {
                     startBrowser(it.url)
                 }
-        compositeDisposable.add(itemClick)
+        val bookmark = adapter.bookmarkEvent
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    bookmarkArticle(it)
+                }
+
+        compositeDisposable.addAll(itemClick, bookmark)
 
         recycler_view.layoutManager = manager
         recycler_view.adapter = adapter
+    }
+
+    private fun bookmarkArticle(article: ArticleViewObject) {
+        val bookmark = viewModel.bookmarkArticle(article)
+                .subscribe {
+                    Log.d(TAG, "bookmarkedArticle: ")
+                }
+
+        compositeDisposable.add(bookmark)
     }
 
     /**
@@ -138,7 +157,7 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
      **/
     private fun initializeFetchArticles() {
         val disposable = fetchArticles
-                .flatMap {
+                .flatMapSingle {
                     viewModel.fetchArticles(it)
                 }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -164,7 +183,7 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
      * If page == 1, replaces the currently displayed list with the new list.
      * Else, appends the new list at the end of the currently displayed list.
      **/
-    private fun updateList(articles: List<Article>) {
+    private fun updateList(articles: List<ArticleViewObject>) {
         if (page == 1) {
             adapter.newList(articles)
         } else {
@@ -184,5 +203,21 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
         val intent = builder.build()
         intent.intent.`package` = "com.android.chrome"
         intent.launchUrl(this, Uri.parse(url))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bookmarks, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.view_bookmarks -> {
+                val intent = Intent(this, BookmarksListActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

@@ -2,15 +2,16 @@ package jermaine.technews.ui.articles
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import io.reactivex.subjects.PublishSubject
-import jermaine.domain.articles.model.Article
 import jermaine.technews.R
+import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
 class ArticlesListAdapter(
-        private var articles: MutableList<Article>,
+        private var articles: MutableList<ArticleViewObject>,
         private val onLastItemCallback: OnLastItemCallback
 ) : RecyclerView.Adapter<ArticleViewHolder>() {
     companion object {
@@ -23,7 +24,9 @@ class ArticlesListAdapter(
     /**
      * Emits the item being clicked from the list view.
      **/
-    val clickEvent: PublishSubject<Article> = PublishSubject.create()
+    val clickEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
+
+    val bookmarkEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
 
     override fun getItemViewType(position: Int): Int {
         return if (articles[position].title.contentEquals(LOADER)) {
@@ -54,6 +57,20 @@ class ArticlesListAdapter(
             holder.itemView.setOnClickListener {
                 clickEvent.onNext(item)
             }
+            holder.setBookmarkListener(View.OnClickListener {
+                if (item.bookmarked) {
+                    holder.setBookmarkIcon(R.drawable.ic_bookmark_border_red_24dp)
+                } else {
+                    holder.setBookmarkIcon(R.drawable.ic_bookmark_red_24dp)
+                }
+                bookmarkEvent.onNext(item)
+            })
+
+            if (item.bookmarked) {
+                holder.setBookmarkIcon(R.drawable.ic_bookmark_red_24dp)
+            } else {
+                holder.setBookmarkIcon(R.drawable.ic_bookmark_border_red_24dp)
+            }
 
             if (position == articles.size - 1) {
                 onLastItemCallback.onLastItem()
@@ -66,7 +83,7 @@ class ArticlesListAdapter(
     /**
      * Replaces the entire list displayed in the list view.
      **/
-    fun newList(articles: List<Article>) {
+    fun newList(articles: List<ArticleViewObject>) {
         this.articles = arrayListOf()
         this.articles.addAll(articles)
         notifyDataSetChanged()
@@ -75,7 +92,7 @@ class ArticlesListAdapter(
     /**
      * Appends the new list at the end of the currently displayed list.
      **/
-    fun append(articles: List<Article>) {
+    fun append(articles: List<ArticleViewObject>) {
         val startPosition = this.articles.size
 
         this.articles.addAll(articles)
@@ -85,7 +102,7 @@ class ArticlesListAdapter(
     /**
      * Appends the new article at the end of the currently displayed list.
      **/
-    fun append(article: Article) {
+    fun append(article: ArticleViewObject) {
         this.articles.add(article)
         this.notifyItemInserted(this.articles.size - 1)
     }
@@ -94,7 +111,8 @@ class ArticlesListAdapter(
      * Shows pagination indicator at the end of the list.
      **/
     fun showPaginateIndicator() {
-        val loader = Article(title = ArticlesListAdapter.LOADER)
+        // safe to put 0 value to bookmarkDrawableResId since we only display LOADER
+        val loader = ArticleViewObject(title = ArticlesListAdapter.LOADER, bookmarkDrawableResId = 0)
         append(loader)
     }
 

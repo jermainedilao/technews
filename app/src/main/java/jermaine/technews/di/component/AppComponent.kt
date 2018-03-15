@@ -2,9 +2,11 @@ package jermaine.technews.di.component
 
 import android.app.Application
 import dagger.Component
+import jermaine.data.di.module.DatabaseModule
 import jermaine.data.di.module.NetworkModule
 import jermaine.technews.di.module.*
 import jermaine.technews.ui.articles.ArticlesListActivity
+import jermaine.technews.ui.bookmarks.BookmarksListActivity
 import javax.inject.Singleton
 
 
@@ -16,7 +18,9 @@ import javax.inject.Singleton
             ServiceModule::class,
             UseCaseModule::class,
             ViewModelModule::class,
-            NetworkModule::class
+            NetworkModule::class,
+            DatabaseModule::class,
+            DaoModule::class
         ]
 )
 interface AppComponent {
@@ -28,8 +32,12 @@ interface AppComponent {
                         .serviceModule(ServiceModule())
                         .useCaseModule(UseCaseModule())
                         .networkModule(NetworkModule(app))
+                        .databaseModule(DatabaseModule(app))
+                        .daoModule(DaoModule())
                         .build()
     }
 
     fun inject(articlesListActivity: ArticlesListActivity)
+
+    fun inject(articlesListActivity: BookmarksListActivity)
 }

@@ -13,8 +13,9 @@
         android:layout_marginStart="@dimen/list_item_card_horizontal_margin"
         android:layout_marginTop="@dimen/list_item_card_vertical_margin"
         android:background="@android:color/white"
-        android:foreground="?android:attr/selectableItemBackground"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardPreventCornerOverlap="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +23,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="8dp">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/image_view"
@@ -38,7 +38,7 @@
             <TextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -76,6 +76,37 @@
                 android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0.3"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/source" />
+
+            <Button
+                android:id="@+id/bookmark"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:drawablePadding="4dp"
+                android:drawableStart="@drawable/ic_bookmark_border_red_24dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
+                android:text="Add"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:layout_editor_absoluteX="26dp"
+                tools:layout_editor_absoluteY="24dp" />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

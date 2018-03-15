@@ -1,4 +1,4 @@
-package jermaine.data.articles.service
+package jermaine.data.articles.service.model
 
 import jermaine.domain.articles.model.Article
 
