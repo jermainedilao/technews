@@ -8,7 +8,7 @@ object ArticleUtil {
     fun getIdValue(article: jermaine.domain.articles.model.Article): String {
         with(article) {
             val digest = MessageDigest.getInstance("MD5")
-            val message = "$id:$publishedAt".toByteArray()
+            val message = "$title:$publishedAt".toByteArray()
             return UUID.nameUUIDFromBytes(digest.digest(message)).toString()
         }
     }

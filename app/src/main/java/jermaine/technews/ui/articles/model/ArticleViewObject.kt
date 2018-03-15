@@ -14,7 +14,8 @@ class ArticleViewObject(
         var urlToImage: String = "",
         var publishedAt: String = "",
         var bookmarked: Boolean = false,
-        var bookmarkDrawableResId: Int
+        var bookmarkDrawableResId: Int,
+        var bookmarkButtonText: String = "Add"
 ) {
     fun toDomainRepresentation(): Article = Article(
             id = id,

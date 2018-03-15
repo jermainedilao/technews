@@ -49,7 +49,7 @@ class ArticlesViewModel(
                     Observable.fromIterable(it)
                 }
                 .map{
-                    ViewObjectParser.articleToViewRepresentation(it)
+                    ViewObjectParser.articleToViewObjectRepresentation(it)
                 }
                 .toList()
                 .doOnSubscribe {
@@ -91,7 +91,7 @@ class ArticlesViewModel(
                         Observable.fromIterable(it)
                     }
                     .map{
-                        ViewObjectParser.articleToViewRepresentation(it)
+                        ViewObjectParser.articleToViewObjectRepresentation(it)
                     }
                     .toList()
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TechNews</string>
+    <string name="add_text">Add</string>
+    <string name="remove_text">Remove</string>
 </resources>

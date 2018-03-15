@@ -66,7 +66,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
      * Initializes the recycler view boiler plate.
      **/
     private fun initializeList() {
-        adapter = ArticlesListAdapter(arrayListOf(), this)
+        adapter = ArticlesListAdapter(this, arrayListOf(), this)
         val manager = LinearLayoutManager(this)
 
         val itemClick = adapter.clickEvent

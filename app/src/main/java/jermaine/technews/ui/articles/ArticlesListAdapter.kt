@@ -1,5 +1,6 @@
 package jermaine.technews.ui.articles
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
 class ArticlesListAdapter(
+        private var context: Context,
         private var articles: MutableList<ArticleViewObject>,
         private val onLastItemCallback: OnLastItemCallback
 ) : RecyclerView.Adapter<ArticleViewHolder>() {
@@ -60,17 +62,16 @@ class ArticlesListAdapter(
             holder.setBookmarkListener(View.OnClickListener {
                 if (item.bookmarked) {
                     holder.setBookmarkIcon(R.drawable.ic_bookmark_border_red_24dp)
+                    holder.setBookMarkButtonText(context.getString(R.string.add_text))
                 } else {
                     holder.setBookmarkIcon(R.drawable.ic_bookmark_red_24dp)
+                    holder.setBookMarkButtonText(context.getString(R.string.remove_text))
                 }
                 bookmarkEvent.onNext(item)
             })
 
-            if (item.bookmarked) {
-                holder.setBookmarkIcon(R.drawable.ic_bookmark_red_24dp)
-            } else {
-                holder.setBookmarkIcon(R.drawable.ic_bookmark_border_red_24dp)
-            }
+            holder.setBookmarkIcon(item.bookmarkDrawableResId)
+            holder.setBookMarkButtonText(item.bookmarkButtonText)
 
             if (position == articles.size - 1) {
                 onLastItemCallback.onLastItem()

@@ -6,7 +6,7 @@ import jermaine.technews.ui.articles.model.ArticleViewObject
 
 
 object ViewObjectParser {
-    fun articleToViewRepresentation(article: jermaine.domain.articles.model.Article): ArticleViewObject =
+    fun articleToViewObjectRepresentation(article: jermaine.domain.articles.model.Article): ArticleViewObject =
             with(article) {
                 ArticleViewObject(
                         id = ArticleUtil.getIdValue(article),
@@ -18,7 +18,8 @@ object ViewObjectParser {
                         urlToImage = urlToImage,
                         publishedAt = publishedAt,
                         bookmarked = bookmarked,
-                        bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_red_24dp else R.drawable.ic_bookmark_border_red_24dp
+                        bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_red_24dp else R.drawable.ic_bookmark_border_red_24dp,
+                        bookmarkButtonText = if (bookmarked) "Remove" else "Add"
                 )
             }
 }
