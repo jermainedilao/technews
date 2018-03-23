@@ -1,9 +1,6 @@
 package jermaine.data.articles.db.room
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import io.reactivex.Single
 import jermaine.data.articles.db.model.ArticleModel
 
@@ -15,4 +12,7 @@ interface ArticleRoomDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveArticle(article: ArticleModel)
+
+    @Delete
+    fun deleteArticle(article: ArticleModel)
 }

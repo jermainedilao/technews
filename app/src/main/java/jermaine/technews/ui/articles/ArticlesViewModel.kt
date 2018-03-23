@@ -8,6 +8,7 @@ import io.reactivex.subjects.PublishSubject
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
+import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.util.ViewObjectParser
 
@@ -15,7 +16,8 @@ import jermaine.technews.ui.articles.util.ViewObjectParser
 class ArticlesViewModel(
         private val fetchArticlesListUseCase: FetchArticlesListUseCase,
         private val bookmarkArticleUseCase: BookmarkArticleUseCase,
-        private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase
+        private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
+        private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase
 ) {
 
     companion object {
@@ -48,7 +50,7 @@ class ArticlesViewModel(
                 .flatMapObservable {
                     Observable.fromIterable(it)
                 }
-                .map{
+                .map {
                     ViewObjectParser.articleToViewObjectRepresentation(it)
                 }
                 .toList()
@@ -79,8 +81,14 @@ class ArticlesViewModel(
     /**
      * Bookmarks an article.
      **/
-        fun bookmarkArticle(article: ArticleViewObject): Completable =
+    fun bookmarkArticle(article: ArticleViewObject): Completable =
             bookmarkArticleUseCase.execute(article.toDomainRepresentation())
+
+    /**
+     * Removes bookmarked article.
+     **/
+    fun removeBookmarkedArticle(article: ArticleViewObject): Completable =
+            removeBookmarkedArticleUseCase.execute(article.toDomainRepresentation())
 
     /**
      * Returns list of bookmarked articles.
@@ -90,7 +98,7 @@ class ArticlesViewModel(
                     .flatMapObservable {
                         Observable.fromIterable(it)
                     }
-                    .map{
+                    .map {
                         ViewObjectParser.articleToViewObjectRepresentation(it)
                     }
                     .toList()

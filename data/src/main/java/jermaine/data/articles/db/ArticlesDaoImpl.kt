@@ -48,4 +48,18 @@ class ArticlesDaoImpl(private val articleRoomDao: ArticleRoomDao) : ArticlesDao 
                         articleRoomDao.saveArticle(it)
                         Completable.complete()
                     }
+
+    override fun removeBookmarkedArticle(article: Article): Completable =
+            Single.just(article)
+                    .subscribeOn(Schedulers.io())
+                    .map {
+                        val item = DataObjectParser.articleToDataRepresentation(it)
+                        item.bookmarked = true
+
+                        item
+                    }
+                    .flatMapCompletable {
+                        articleRoomDao.deleteArticle(it)
+                        Completable.complete()
+                    }
 }

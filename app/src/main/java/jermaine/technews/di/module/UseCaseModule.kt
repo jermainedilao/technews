@@ -6,6 +6,7 @@ import jermaine.domain.articles.ArticlesRepository
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
+import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
 import javax.inject.Singleton
 
 
@@ -25,4 +26,9 @@ class UseCaseModule {
     @Provides
     fun providesFetchBookmarkedArticlesUseCase(articlesRepository: ArticlesRepository): FetchBookmarkedArticleUseCase =
             FetchBookmarkedArticleUseCase(articlesRepository)
+
+    @Singleton
+    @Provides
+    fun providesRemoveBookmarkedArticleUseCase(articlesRepository: ArticlesRepository): RemoveBookmarkedArticleUseCase =
+            RemoveBookmarkedArticleUseCase(articlesRepository)
 }

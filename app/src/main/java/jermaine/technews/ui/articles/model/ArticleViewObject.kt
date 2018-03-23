@@ -2,6 +2,7 @@ package jermaine.technews.ui.articles.model
 
 import jermaine.domain.articles.model.Article
 import jermaine.domain.articles.model.Source
+import jermaine.technews.R
 
 
 class ArticleViewObject(
@@ -15,7 +16,7 @@ class ArticleViewObject(
         var publishedAt: String = "",
         var bookmarked: Boolean = false,
         var bookmarkDrawableResId: Int,
-        var bookmarkButtonText: String = "Add"
+        var bookmarkButtonTextResId: Int = R.string.add_text
 ) {
     fun toDomainRepresentation(): Article = Article(
             id = id,

@@ -50,7 +50,7 @@ class ArticleViewHolder(private val context: Context, view: View) : RecyclerView
         )
     }
 
-    fun setBookMarkButtonText(bookmarkButtonText: String) {
-        itemView.bookmark.text = bookmarkButtonText
+    fun setBookMarkButtonText(textResId: Int) {
+        itemView.bookmark.text = context.getText(textResId)
     }
 }

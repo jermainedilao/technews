@@ -27,4 +27,7 @@ class ArticlesRepositoryImpl(private val articlesService: ArticlesService,
 
     override fun fetchAllBookMarkedArticles(): Single<List<Article>> =
             articlesDao.fetchAllBookmarkedArticles()
+
+    override fun removeBookmarkedArticle(article: Article): Completable =
+            articlesDao.removeBookmarkedArticle(article)
 }

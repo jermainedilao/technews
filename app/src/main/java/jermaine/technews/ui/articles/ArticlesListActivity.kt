@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -85,23 +87,46 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
                 }
         val bookmark = adapter.bookmarkEvent
                 .observeOn(AndroidSchedulers.mainThread())
+                .concatMapCompletable {
+                    bookmarkOrUnBookmarkArticle(it)
+                }
                 .subscribe {
-                    bookmarkArticle(it)
+                    Log.d(TAG, "Done bookmarking/removing bookmark article.")
                 }
 
         compositeDisposable.addAll(itemClick, bookmark)
 
         recycler_view.layoutManager = manager
+        (recycler_view.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         recycler_view.adapter = adapter
     }
 
-    private fun bookmarkArticle(article: ArticleViewObject) {
-        val bookmark = viewModel.bookmarkArticle(article)
-                .subscribe {
-                    Log.d(TAG, "bookmarkedArticle: ")
-                }
-
-        compositeDisposable.add(bookmark)
+    /**
+     * Bookmark or removes bookmark from article.
+     *
+     * If initial bookmark state of article passed is true,
+     * this will remove the bookmark from article.
+     * Otherwise, it will bookmark the article.
+     *
+     * @param pair Pair of position of the item from the list and the item itself.
+     * @return Completable - emits when bookmark or removing bookmark is finished.
+     **/
+    private fun bookmarkOrUnBookmarkArticle(pair: Pair<Int, ArticleViewObject>): Completable {
+        val position = pair.first
+        val item = pair.second
+        return if (item.bookmarked) {
+            viewModel.removeBookmarkedArticle(item)
+                    .andThen(adapter.removeBookmarkedArticle(position, item))
+                    .doOnComplete {
+                        Log.d(TAG, "Done removing bookmark from article.")
+                    }
+        } else {
+            viewModel.bookmarkArticle(item)
+                    .andThen(adapter.bookmarkArticle(position, item))
+                    .doOnComplete {
+                        Log.d(TAG, "Done bookmarking article.")
+                    }
+        }
     }
 
     /**

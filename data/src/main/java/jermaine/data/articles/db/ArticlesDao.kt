@@ -11,4 +11,6 @@ interface ArticlesDao {
     fun fetchAllBookmarkedArticles(): Single<List<Article>>
 
     fun bookMarkArticle(article: Article): Completable
+
+    fun removeBookmarkedArticle(article: Article): Completable
 }

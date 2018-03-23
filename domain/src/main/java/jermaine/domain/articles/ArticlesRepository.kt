@@ -13,4 +13,6 @@ interface ArticlesRepository {
     fun fetchBookMarkedArticles(page: Int): Single<List<Article>>
 
     fun fetchAllBookMarkedArticles(): Single<List<Article>>
+
+    fun removeBookmarkedArticle(article: Article): Completable
 }

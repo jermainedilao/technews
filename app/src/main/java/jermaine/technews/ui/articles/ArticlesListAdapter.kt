@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
@@ -28,7 +29,10 @@ class ArticlesListAdapter(
      **/
     val clickEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
 
-    val bookmarkEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
+    /**
+     * Emits pair of position and ArticleViewObject of the item being bookmarked.
+     **/
+    val bookmarkEvent: PublishSubject<Pair<Int, ArticleViewObject>> = PublishSubject.create()
 
     override fun getItemViewType(position: Int): Int {
         return if (articles[position].title.contentEquals(LOADER)) {
@@ -60,18 +64,11 @@ class ArticlesListAdapter(
                 clickEvent.onNext(item)
             }
             holder.setBookmarkListener(View.OnClickListener {
-                if (item.bookmarked) {
-                    holder.setBookmarkIcon(R.drawable.ic_bookmark_border_red_24dp)
-                    holder.setBookMarkButtonText(context.getString(R.string.add_text))
-                } else {
-                    holder.setBookmarkIcon(R.drawable.ic_bookmark_red_24dp)
-                    holder.setBookMarkButtonText(context.getString(R.string.remove_text))
-                }
-                bookmarkEvent.onNext(item)
+                bookmarkEvent.onNext(Pair(position, item))
             })
 
             holder.setBookmarkIcon(item.bookmarkDrawableResId)
-            holder.setBookMarkButtonText(item.bookmarkButtonText)
+            holder.setBookMarkButtonText(item.bookmarkButtonTextResId)
 
             if (position == articles.size - 1) {
                 onLastItemCallback.onLastItem()
@@ -126,5 +123,31 @@ class ArticlesListAdapter(
             articles.removeAt(lastItemPos)
         }
         notifyItemRemoved(lastItemPos)
+    }
+
+    /**
+     * Adds bookmark indicator to the article inside the list.
+     **/
+    fun bookmarkArticle(position: Int, item: ArticleViewObject): Completable {
+        item.bookmarked = true
+        item.bookmarkDrawableResId = R.drawable.ic_bookmark_red_24dp
+        item.bookmarkButtonTextResId = R.string.remove_text
+        articles[position] = item
+        notifyItemChanged(position)
+
+        return Completable.complete()
+    }
+
+    /**
+     * Removes bookmark indicator from the article inside the list.
+     **/
+    fun removeBookmarkedArticle(position: Int, item: ArticleViewObject): Completable {
+        item.bookmarked = false
+        item.bookmarkDrawableResId = R.drawable.ic_bookmark_border_red_24dp
+        item.bookmarkButtonTextResId = R.string.add_text
+        articles[position] = item
+        notifyItemChanged(position)
+
+        return Completable.complete()
     }
 }
