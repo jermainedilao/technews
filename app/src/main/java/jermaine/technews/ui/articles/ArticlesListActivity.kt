@@ -20,6 +20,7 @@ import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
 import jermaine.technews.util.callbacks.OnLastItemCallback
 import kotlinx.android.synthetic.main.activity_articles_list.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
@@ -114,16 +115,40 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
     private fun bookmarkOrUnBookmarkArticle(pair: Pair<Int, ArticleViewObject>): Completable {
         val position = pair.first
         val item = pair.second
+
+        // If emitted value is true, display item into its loading state.
+        // If false, display item into its default state.
+        val loadingState = PublishSubject.create<Boolean>()
+
+        // If bookmarking takes less than 200 milliseconds
+        // don't mind setting its item to its loading state.
+        val disposable = loadingState
+                .debounce(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.d(TAG, "loading state: $it")
+                    if (it) {
+                        adapter.setLoadingState(position, item)
+                    } else {
+                        adapter.setDefaultState(position, item)
+                    }
+                }
+        compositeDisposable.add(disposable)
+
+        loadingState.onNext(true)
+
         return if (item.bookmarked) {
             viewModel.removeBookmarkedArticle(item)
                     .andThen(adapter.removeBookmarkedArticle(position, item))
                     .doOnComplete {
+                        loadingState.onNext(false)
                         Log.d(TAG, "Done removing bookmark from article.")
                     }
         } else {
             viewModel.bookmarkArticle(item)
                     .andThen(adapter.bookmarkArticle(position, item))
                     .doOnComplete {
+                        loadingState.onNext(false)
                         Log.d(TAG, "Done bookmarking article.")
                     }
         }
