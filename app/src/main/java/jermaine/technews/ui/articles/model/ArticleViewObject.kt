@@ -5,7 +5,7 @@ import jermaine.domain.articles.model.Source
 import jermaine.technews.R
 
 
-class ArticleViewObject(
+data class ArticleViewObject(
         var id: String = "",
         var source: Source = Source(),
         var author: String = "",
@@ -16,8 +16,14 @@ class ArticleViewObject(
         var publishedAt: String = "",
         var bookmarked: Boolean = false,
         var bookmarkDrawableResId: Int,
-        var bookmarkButtonTextResId: Int = R.string.add_text
+        var bookmarkButtonTextResId: Int = R.string.add_text,
+        var containerAlpha: Float = DEFAULT_STATE
 ) {
+    companion object {
+        const val DEFAULT_STATE = 1.0F
+        const val LOADING_STATE = 0.6F
+    }
+
     fun toDomainRepresentation(): Article = Article(
             id = id,
             source = source,

@@ -53,4 +53,8 @@ class ArticleViewHolder(private val context: Context, view: View) : RecyclerView
     fun setBookMarkButtonText(textResId: Int) {
         itemView.bookmark.text = context.getText(textResId)
     }
+
+    fun setContainerAlpha(alpha: Float) {
+        itemView.cardview.alpha = alpha
+    }
 }

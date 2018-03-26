@@ -69,6 +69,7 @@ class ArticlesListAdapter(
 
             holder.setBookmarkIcon(item.bookmarkDrawableResId)
             holder.setBookMarkButtonText(item.bookmarkButtonTextResId)
+            holder.setContainerAlpha(item.containerAlpha)
 
             if (position == articles.size - 1) {
                 onLastItemCallback.onLastItem()
@@ -127,6 +128,9 @@ class ArticlesListAdapter(
 
     /**
      * Adds bookmark indicator to the article inside the list.
+     *
+     * @param position Position of the item inside the list.
+     * @param item The item itself.
      **/
     fun bookmarkArticle(position: Int, item: ArticleViewObject): Completable {
         item.bookmarked = true
@@ -140,6 +144,9 @@ class ArticlesListAdapter(
 
     /**
      * Removes bookmark indicator from the article inside the list.
+     *
+     * @param position Position of the item inside the list.
+     * @param item The item itself.
      **/
     fun removeBookmarkedArticle(position: Int, item: ArticleViewObject): Completable {
         item.bookmarked = false
@@ -149,5 +156,29 @@ class ArticlesListAdapter(
         notifyItemChanged(position)
 
         return Completable.complete()
+    }
+
+    /**
+     * Sets the article inside the list into loading state.
+     *
+     * @param position Position of the item inside the list.
+     * @param item The item itself.
+     **/
+    fun setLoadingState(position: Int, item: ArticleViewObject) {
+        item.containerAlpha = ArticleViewObject.LOADING_STATE
+        articles[position] = item
+        notifyItemChanged(position)
+    }
+
+    /**
+     * Sets the article inside the list into its default state.
+     *
+     * @param position Position of the item inside the list.
+     * @param item The item itself.
+     **/
+    fun setDefaultState(position: Int, item: ArticleViewObject) {
+        item.containerAlpha = ArticleViewObject.DEFAULT_STATE
+        articles[position] = item
+        notifyItemChanged(position)
     }
 }

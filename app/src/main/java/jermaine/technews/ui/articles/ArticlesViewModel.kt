@@ -28,13 +28,13 @@ class ArticlesViewModel(
      * Show paginate indicator if emitted value is true.
      * If false hide refresh paginate.
      **/
-    val paginateIndicator: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
+    val paginateIndicator: PublishSubject<Boolean> = PublishSubject.create()
 
     /**
      * Show refresh indicator if emitted value is true.
      * If false hide refresh indicator.
      **/
-    val refreshIndicator: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
+    val refreshIndicator: PublishSubject<Boolean> = PublishSubject.create()
 
     /**
      * Returns list of articles observable.
