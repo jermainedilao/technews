@@ -77,9 +77,9 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
                 }
         val bookmark = adapter.bookmarkEvent
                 .observeOn(AndroidSchedulers.mainThread())
-//                .concatMapCompletable {
-//                    bookmarkOrUnBookmarkArticle(it)
-//                }
+                .concatMapCompletable {
+                    removeBookmarkedArticle(it)
+                }
                 .subscribe {
                     Log.d(TAG, "Done bookmarking/removing bookmark article.")
                 }
@@ -91,25 +91,17 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     }
 
     /**
-     * Bookmark or removes bookmark from article.
-     *
-     * If initial bookmark state of article passed is true,
-     * this will remove the bookmark from article.
-     * Otherwise, it will bookmark the article.
+     * Removes bookmarked article.
      *
      * @param pair Pair of position of the item from the list and the item itself.
      * @return Completable - emits when bookmark or removing bookmark is finished.
      **/
-    private fun bookmarkOrUnBookmarkArticle(pair: Pair<Int, ArticleViewObject>): Completable {
+    private fun removeBookmarkedArticle(pair: Pair<Int, ArticleViewObject>): Completable {
         val position = pair.first
         val item = pair.second
-        return if (item.bookmarked) {
-            viewModel.removeBookmarkedArticle(item)
-                    .andThen(adapter.removeBookmarkedArticle(position, item))
-        } else {
-            viewModel.bookmarkArticle(item)
-                    .andThen(adapter.bookmarkArticle(position, item))
-        }
+
+        return viewModel.removeBookmarkedArticle(item)
+                    .andThen(adapter.remove(position))
     }
 
     override fun onLastItem() {

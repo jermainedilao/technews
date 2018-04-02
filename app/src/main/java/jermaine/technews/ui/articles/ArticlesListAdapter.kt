@@ -159,6 +159,19 @@ class ArticlesListAdapter(
     }
 
     /**
+     * Removes item from the list.
+     *
+     * @param position Position of the item inside the list.
+     * @param item The item itself.
+     **/
+    fun remove(position: Int): Completable {
+        articles.removeAt(position)
+        notifyItemRemoved(position)
+
+        return Completable.complete()
+    }
+
+    /**
      * Sets the article inside the list into loading state.
      *
      * @param position Position of the item inside the list.
