@@ -1,6 +1,5 @@
-package jermaine.technews.ui.articles
+package jermaine.technews.ui.articles.adapter
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,20 +7,19 @@ import android.view.ViewGroup
 import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
+import jermaine.technews.ui.articles.ArticleViewHolder
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
 class ArticlesListAdapter(
-        private var context: Context,
         private var articles: MutableList<ArticleViewObject>,
         private val onLastItemCallback: OnLastItemCallback
 ) : RecyclerView.Adapter<ArticleViewHolder>() {
     companion object {
-        const val LOADER = "LOADER"
-
         const val VIEW_TYPE_ARTICLE = 0
         const val VIEW_TYPE_LOADER = 1
+        const val VIEW_TYPE_ATTRIBUTION = 2
     }
 
     /**
@@ -34,45 +32,50 @@ class ArticlesListAdapter(
      **/
     val bookmarkEvent: PublishSubject<Pair<Int, ArticleViewObject>> = PublishSubject.create()
 
-    override fun getItemViewType(position: Int): Int {
-        return if (articles[position].title.contentEquals(LOADER)) {
-            VIEW_TYPE_LOADER
-        } else {
-            VIEW_TYPE_ARTICLE
-        }
-    }
+    override fun getItemViewType(position: Int): Int =
+            articles[position].viewType
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-        val view = if (viewType == VIEW_TYPE_LOADER) {
-            LayoutInflater.from(parent.context).inflate(R.layout.loader, parent, false)
-        } else {
-            LayoutInflater.from(parent.context).inflate(R.layout.view_holder_article, parent, false)
+        val view = when (viewType) {
+            VIEW_TYPE_LOADER ->
+                LayoutInflater.from(parent.context).inflate(R.layout.loader, parent, false)
+            VIEW_TYPE_ATTRIBUTION ->
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_attribution, parent, false)
+            else ->
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_article, parent, false)
         }
 
         return ArticleViewHolder(parent.context, view)
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        if (getItemViewType(position) == VIEW_TYPE_ARTICLE) {
-            val item = articles[position]
+        val item = articles[position]
 
-            holder.setImage(item.urlToImage)
-            holder.setTitle(item.title)
-            holder.setDescription(item.description)
-            holder.setSource(item.source.name)
-            holder.itemView.setOnClickListener {
-                clickEvent.onNext(item)
+        when (getItemViewType(position)) {
+            VIEW_TYPE_ARTICLE -> {
+                holder.setImage(item.urlToImage)
+                holder.setTitle(item.title)
+                holder.setDescription(item.description)
+                holder.setSource(item.source.name)
+                holder.itemView.setOnClickListener {
+                    clickEvent.onNext(item)
+                }
+                holder.setBookmarkListener(View.OnClickListener {
+                    bookmarkEvent.onNext(Pair(position, item))
+                })
+
+                holder.setBookmarkIcon(item.bookmarkDrawableResId)
+                holder.setBookMarkButtonText(item.bookmarkButtonTextResId)
+                holder.setContainerAlpha(item.containerAlpha)
+
+                if (position == articles.size - 1) {
+                    onLastItemCallback.onLastItem()
+                }
             }
-            holder.setBookmarkListener(View.OnClickListener {
-                bookmarkEvent.onNext(Pair(position, item))
-            })
-
-            holder.setBookmarkIcon(item.bookmarkDrawableResId)
-            holder.setBookMarkButtonText(item.bookmarkButtonTextResId)
-            holder.setContainerAlpha(item.containerAlpha)
-
-            if (position == articles.size - 1) {
-                onLastItemCallback.onLastItem()
+            VIEW_TYPE_ATTRIBUTION -> {
+                holder.itemView.setOnClickListener {
+                    clickEvent.onNext(item)
+                }
             }
         }
     }
@@ -111,7 +114,7 @@ class ArticlesListAdapter(
      **/
     fun showPaginateIndicator() {
         // safe to put 0 value to bookmarkDrawableResId since we only display LOADER
-        val loader = ArticleViewObject(title = ArticlesListAdapter.LOADER, bookmarkDrawableResId = 0)
+        val loader = ArticleViewObject(viewType = VIEW_TYPE_LOADER)
         append(loader)
     }
 

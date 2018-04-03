@@ -9,6 +9,7 @@ import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
+import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.util.ViewObjectParser
 
@@ -54,6 +55,12 @@ class ArticlesViewModel(
                     ViewObjectParser.articleToViewObjectRepresentation(it)
                 }
                 .toList()
+                .map {
+                    if (page != 1) {
+                        addAtrribution(it)
+                    }
+                    it
+                }
                 .doOnSubscribe {
                     // Only show refreshing if fetching first page.
                     if (page == 1) {
@@ -76,6 +83,12 @@ class ArticlesViewModel(
                         paginateIndicator.onNext(false)
                     }
                 }
+    }
+
+    private fun addAtrribution(list: MutableList<ArticleViewObject>) {
+        val item = ArticleViewObject(viewType = ArticlesListAdapter.VIEW_TYPE_ATTRIBUTION)
+        item.url = "https://newsapi.org"
+        list.add(0, item)
     }
 
     /**

@@ -4,4 +4,5 @@
     <dimen name="list_item_card_vertical_margin">8dp</dimen>
 
     <dimen name="text_size_small">10sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
 </resources>

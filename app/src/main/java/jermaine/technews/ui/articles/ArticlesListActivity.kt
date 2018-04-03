@@ -15,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
+import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
@@ -78,7 +79,7 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
      * Initializes the recycler view boiler plate.
      **/
     private fun initializeList() {
-        adapter = ArticlesListAdapter(this, arrayListOf(), this)
+        adapter = ArticlesListAdapter(arrayListOf(), this)
         val manager = LinearLayoutManager(this)
 
         val itemClick = adapter.clickEvent

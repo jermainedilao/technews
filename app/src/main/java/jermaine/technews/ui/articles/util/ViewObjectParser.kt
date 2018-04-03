@@ -2,6 +2,7 @@ package jermaine.technews.ui.articles.util
 
 import jermaine.domain.articles.util.ArticleUtil
 import jermaine.technews.R
+import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 
 
@@ -19,7 +20,8 @@ object ViewObjectParser {
                         publishedAt = publishedAt,
                         bookmarked = bookmarked,
                         bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_red_24dp else R.drawable.ic_bookmark_border_red_24dp,
-                        bookmarkButtonTextResId = if (bookmarked) R.string.remove_text else R.string.add_text
+                        bookmarkButtonTextResId = if (bookmarked) R.string.remove_text else R.string.add_text,
+                        viewType = ArticlesListAdapter.VIEW_TYPE_ARTICLE
                 )
             }
 }
