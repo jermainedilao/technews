@@ -8,7 +8,7 @@ Android Studio 3.0 or newer.
 ### API Keys
 You need to obtain an API key from [News API](https://newsapi.org/).
 
-After obtaining the API key, in your Android Studio, inside `data/src/main`. Create an Android resource file named `strings.xml` and place the API key there with string name `news_api_key` like this:
+After obtaining the API key, in your Android Studio, inside `data/src/main`. Create an `Android resource file` named `strings.xml` and place the API key there with string name `news_api_key` like this:
 ```
 <string name="news_api_key">insert_your_api_key_here></string>
 ```
