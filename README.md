@@ -23,6 +23,7 @@ And you're all set!
 * [Gson](https://github.com/google/gson) - For serializing/deserializing JSON objects.
 * [RxJava 2](https://github.com/ReactiveX/RxJava)
 * [Room](https://developer.android.com/topic/libraries/architecture/room.html) - For persisting data.
+* [Glide](https://bumptech.github.io/glide/) - Image loading library.
 
 ### Todo
 * Build unit tests
