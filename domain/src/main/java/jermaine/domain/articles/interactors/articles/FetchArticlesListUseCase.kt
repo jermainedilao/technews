@@ -27,14 +27,17 @@ class FetchArticlesListUseCase(private val articlesRepository: ArticlesRepositor
                                 Observable.fromIterable(bookmarks)
                                         .filter {
                                             val articleId = ArticleUtil.getIdValue(article)
-                                            if (articleId.contentEquals(it.id)) {
-                                                article.id = ArticleUtil.getIdValue(article)
-                                            }
                                             articleId.contentEquals(it.id)
                                         }
                                         .first(Article(id = "none"))
                                         .map {
-                                            article.bookmarked = !it.id.contentEquals("none")
+                                            val bookmarked = !it.id.contentEquals("none")
+
+                                            if (bookmarked) {
+                                                article.id = it.id
+                                            }
+
+                                            article.bookmarked = bookmarked
                                             article
                                         }
                                         .toObservable()
