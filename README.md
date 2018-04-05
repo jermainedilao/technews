@@ -28,6 +28,7 @@ And you're all set!
 ### Todo
 * Build unit tests
 * Local pagination in Bookmarks screen
+* Add sources screen to allow users to pick news sources that they want.
 
 ### Inspiration
 To enhance my knowledge and skills in developing better android apps.
