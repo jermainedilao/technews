@@ -197,4 +197,9 @@ class ArticlesListAdapter(
         articles[position] = item
         notifyItemChanged(position)
     }
+
+    /**
+     * Returns the currently displayed list.
+     **/
+    fun getItems(): List<ArticleViewObject> = articles
 }

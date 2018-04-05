@@ -25,6 +25,15 @@ data class ArticleViewObject(
         const val LOADING_STATE = 0.6F
     }
 
+    /**
+     * Updates bookmark status and bookmark view details.
+     **/
+    fun setBookmarkDetails(bookmarked: Boolean) {
+        this.bookmarked = bookmarked
+        bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_red_24dp else R.drawable.ic_bookmark_border_red_24dp
+        bookmarkButtonTextResId = if (bookmarked) R.string.remove_text else R.string.add_text
+    }
+
     fun toDomainRepresentation(): Article = Article(
             id = id,
             source = source,

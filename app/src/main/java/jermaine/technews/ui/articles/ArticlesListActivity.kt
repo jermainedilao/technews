@@ -13,6 +13,7 @@ import android.view.MenuItem
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
@@ -68,6 +69,27 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
 
         // Proceed with fetching first page.
         fetchArticles.onNext(1)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateBookmarkStatusOfList()
+    }
+
+    /**
+     * Updates the bookmark status of the items inside the currently displayed list.
+     **/
+    private fun updateBookmarkStatusOfList() {
+        val updateList = viewModel.updateBookMarkStatusFromList(adapter.getItems())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    adapter.newList(it)
+                }, {
+                    Log.e(TAG, "onStart", it)
+                })
+
+        compositeDisposable.add(updateList)
     }
 
     override fun onDestroy() {

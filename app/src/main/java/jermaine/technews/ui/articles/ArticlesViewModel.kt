@@ -4,6 +4,7 @@ import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
@@ -38,7 +39,13 @@ class ArticlesViewModel(
     val refreshIndicator: PublishSubject<Boolean> = PublishSubject.create()
 
     /**
-     * Returns list of articles observable.
+     * Returns list of articles.
+     *
+     * Also, updates bookmark status of the articles inside the list.
+     *
+     * Also, adds News API attribution at the beginning
+     * of the list in every new page.
+     *
      * This is also responsible to trigger
      * pageIndicator and refreshIndicator to show or not.
      *
@@ -55,11 +62,14 @@ class ArticlesViewModel(
                     ViewObjectParser.articleToViewObjectRepresentation(it)
                 }
                 .toList()
+                .flatMap {
+                    updateBookMarkStatusFromList(it)
+                }
                 .map {
                     if (page != 1) {
-                        addAtrribution(it)
+                        addAttribution(it)
                     }
-                    it
+                    it.toList()
                 }
                 .doOnSubscribe {
                     // Only show refreshing if fetching first page.
@@ -85,7 +95,10 @@ class ArticlesViewModel(
                 }
     }
 
-    private fun addAtrribution(list: MutableList<ArticleViewObject>) {
+    /**
+     * Adds News API attribution at the beginning of the list.
+     **/
+    private fun addAttribution(list: MutableList<ArticleViewObject>) {
         val item = ArticleViewObject(viewType = ArticlesListAdapter.VIEW_TYPE_ATTRIBUTION)
         item.url = "https://newsapi.org"
         list.add(0, item)
@@ -115,4 +128,41 @@ class ArticlesViewModel(
                         ViewObjectParser.articleToViewObjectRepresentation(it)
                     }
                     .toList()
+
+    /**
+     * Updates the bookmark status of articles inside the list.
+     *
+     * @param list The list to be updated.
+     **/
+    fun updateBookMarkStatusFromList(list: List<ArticleViewObject>): Single<MutableList<ArticleViewObject>> {
+        val zipper = BiFunction<
+                List<ArticleViewObject>,
+                List<ArticleViewObject>,
+                Pair<List<ArticleViewObject>, List<ArticleViewObject>>> { t1, t2 -> Pair(t1, t2) }
+        return Single.just(list)
+                .zipWith(fetchBookmarkedArticles(1), zipper)
+                .flatMapObservable {
+                    val articles = it.first
+                    val bookmarks = it.second
+
+                    Observable.fromIterable(articles)
+                            .concatMap {
+                                val article = it
+                                Observable.fromIterable(bookmarks)
+                                        .filter {
+                                            article.id.contentEquals(it.id)
+                                        }
+                                        .first(ArticleViewObject(id = "none", viewType = ArticlesListAdapter.VIEW_TYPE_ARTICLE))
+                                        .map {
+                                            val bookmarked = !it.id.contentEquals("none")
+
+                                            article.setBookmarkDetails(bookmarked)
+
+                                            article
+                                        }
+                                        .toObservable()
+                            }
+                }
+                .toList()
+    }
 }
