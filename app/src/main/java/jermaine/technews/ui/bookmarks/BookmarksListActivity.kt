@@ -51,6 +51,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
 
     private fun initializeToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(R.string.bookmarks_text)
     }
 
     private fun fetchBookmarkedArticles() {

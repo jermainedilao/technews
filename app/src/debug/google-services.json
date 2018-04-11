@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "450231598584",
+    "firebase_url": "https://technews-c4c7d.firebaseio.com",
+    "project_id": "technews-c4c7d",
+    "storage_bucket": "technews-c4c7d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450231598584:android:1bae641c746023ec",
+        "android_client_info": {
+          "package_name": "jermaine.technews.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450231598584-bqm40civ9itdj446ta7hvlcpuio05s65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCu83ZfnstRNkI4_BmDSymYPxG_gH6GNU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

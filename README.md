@@ -24,8 +24,10 @@ And you're all set!
 * [RxJava 2](https://github.com/ReactiveX/RxJava)
 * [Room](https://developer.android.com/topic/libraries/architecture/room.html) - For persisting data.
 * [Glide](https://bumptech.github.io/glide/) - Image loading library.
+* [Firebase Crashlytics](https://firebase.google.com/docs/crashlytics/) - For crash reporting.
 
 ### Todo
+* Notify users every morning to read technews
 * Build unit tests
 * Local pagination in Bookmarks screen
 * Add sources screen to allow users to pick news sources that they want.
