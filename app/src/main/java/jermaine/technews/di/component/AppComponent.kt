@@ -29,7 +29,7 @@ interface AppComponent {
                 DaggerAppComponent.builder()
                         .appModule(AppModule())
                         .repositoryModule(RepositoryModule())
-                        .serviceModule(ServiceModule())
+                        .serviceModule(ServiceModule(app))
                         .useCaseModule(UseCaseModule())
                         .networkModule(NetworkModule(app))
                         .databaseModule(DatabaseModule(app))
