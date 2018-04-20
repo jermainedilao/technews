@@ -11,10 +11,6 @@ interface ApiService {
     @POST("/api/v1/newslist")
     @FormUrlEncoded
     fun fetchArticles(
-//            @Query("sources") sources: String,
-//            @Query("category") category: String,
-//            @Query("country") country: String,
-//            @Query("pageSize") pageSize: Int,
             @Field("page") page: Int,
             @Field("news_api_key") newsApiKey: String
     ): Single<FetchArticlesApiResponse>
