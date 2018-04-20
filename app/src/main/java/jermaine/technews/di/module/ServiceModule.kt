@@ -1,5 +1,6 @@
 package jermaine.technews.di.module
 
+import android.app.Application
 import dagger.Module
 import dagger.Provides
 import jermaine.data.articles.ApiService
@@ -9,8 +10,8 @@ import javax.inject.Singleton
 
 
 @Module
-class ServiceModule {
+class ServiceModule(private val app: Application) {
     @Provides
     @Singleton
-    fun providesArticlesService(apiService: ApiService): ArticlesService = ArticlesServiceImpl(apiService)
+    fun providesArticlesService(apiService: ApiService): ArticlesService = ArticlesServiceImpl(apiService, app)
 }

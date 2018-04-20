@@ -3,7 +3,6 @@ package jermaine.data.di.module
 import android.app.Application
 import dagger.Module
 import dagger.Provides
-import jermaine.data.R
 import jermaine.data.articles.ApiService
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -25,21 +24,13 @@ class NetworkModule(val app: Application) {
     @Singleton
     @Provides
     fun providesOkHttpClient(cache: Cache): OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor {
-                val original = it.request()
-
-                val requestBuilder = original.newBuilder()
-                        .addHeader("X-Api-Key", app.getString(R.string.news_api_key))
-
-                it.proceed(requestBuilder.build())
-            }
             .cache(cache)
             .build()
 
     @Singleton
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-            .baseUrl("https://newsapi.org")
+            .baseUrl("https://technews-api.appspot.com")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(okHttpClient)
