@@ -37,3 +37,6 @@ To enhance my knowledge and skills in developing better android apps.
 
 ## Contribution
 If you found an error. Filing an issue together with submitting a pull request (through forking the app) would be cool.
+
+
+<a href='https://play.google.com/store/apps/details?id=jermaine.technews&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height=150 width=400/></a>
