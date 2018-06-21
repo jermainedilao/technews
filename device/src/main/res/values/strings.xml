@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">device</string>
+    <string name="daily_notifications_text">Daily notifications</string>
+    <string name="daily_notifications_description_text">Sends TechNews daily notifications</string>
+
+    <string name="daily_notifications_title">Good morning!</string>
+    <string name="daily_notifications_message">Start your day by reading the latest tech news! Click here to open.</string>
 </resources>

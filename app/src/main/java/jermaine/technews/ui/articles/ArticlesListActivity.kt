@@ -69,6 +69,8 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
 
         // Proceed with fetching first page.
         fetchArticles.onNext(1)
+
+        viewModel.createDailyNotifications()
     }
 
     override fun onStart() {

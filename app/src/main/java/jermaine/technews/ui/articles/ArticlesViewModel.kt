@@ -10,6 +10,7 @@ import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
+import jermaine.domain.notifications.interactors.CreateDailyNotificationsUseCase
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.util.ViewObjectParser
@@ -19,7 +20,8 @@ class ArticlesViewModel(
         private val fetchArticlesListUseCase: FetchArticlesListUseCase,
         private val bookmarkArticleUseCase: BookmarkArticleUseCase,
         private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
-        private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase
+        private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,
+        private val createDailyNotificationsUseCase: CreateDailyNotificationsUseCase
 ) {
 
     companion object {
@@ -164,5 +166,12 @@ class ArticlesViewModel(
                             }
                 }
                 .toList()
+    }
+
+    /**
+     * Creates a daily notification.
+     **/
+    fun createDailyNotifications() {
+        createDailyNotificationsUseCase.execute()
     }
 }

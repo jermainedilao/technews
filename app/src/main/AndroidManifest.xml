@@ -20,11 +20,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="ARTICLES_LIST" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="jermaine.technews.ui.bookmarks.BookmarksListActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName="jermaine.technews.ui.articles.ArticlesListActivity"/>
+            android:parentActivityName="jermaine.technews.ui.articles.ArticlesListActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name="jermaine.device.notifications.alarms.DailyNotificationsAlarmReceiver" />
     </application>
 
 </manifest>
