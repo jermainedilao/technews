@@ -10,11 +10,7 @@ import jermaine.domain.articles.model.Article
 
 class ArticlesRepositoryImpl(private val articlesService: ArticlesService,
                              private val articlesDao: ArticlesDao) : ArticlesRepository {
-    /**
-     * Returns list of articles from the service.
-     *
-     * @param page Page to be returned (used for pagination).
-     **/
+
     override fun fetchArticles(page: Int): Single<List<Article>> =
             articlesService.fetchArticles(page)
                     .subscribeOn(Schedulers.io())

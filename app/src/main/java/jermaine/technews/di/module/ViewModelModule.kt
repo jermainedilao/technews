@@ -6,6 +6,7 @@ import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
+import jermaine.domain.notifications.interactors.CreateDailyNotificationsUseCase
 import jermaine.technews.ui.articles.ArticlesViewModel
 import javax.inject.Singleton
 
@@ -18,9 +19,11 @@ class ViewModelModule {
             fetchArticlesListUseCase: FetchArticlesListUseCase,
             bookmarkArticleUseCase: BookmarkArticleUseCase,
             fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
-            removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase
+            removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,
+            createDailyNotificationsUseCase: CreateDailyNotificationsUseCase
     ): ArticlesViewModel = ArticlesViewModel(
             fetchArticlesListUseCase, bookmarkArticleUseCase,
-            fetchBookmarkedArticleUseCase, removeBookmarkedArticleUseCase
+            fetchBookmarkedArticleUseCase, removeBookmarkedArticleUseCase,
+            createDailyNotificationsUseCase
     )
 }

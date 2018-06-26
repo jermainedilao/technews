@@ -27,7 +27,7 @@ interface AppComponent {
     companion object {
         fun initialize(app: Application): AppComponent =
                 DaggerAppComponent.builder()
-                        .appModule(AppModule())
+                        .appModule(AppModule(app))
                         .repositoryModule(RepositoryModule())
                         .serviceModule(ServiceModule(app))
                         .useCaseModule(UseCaseModule())
