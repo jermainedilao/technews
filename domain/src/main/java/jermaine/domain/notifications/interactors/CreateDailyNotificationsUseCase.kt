@@ -9,7 +9,5 @@ class CreateDailyNotificationsUseCase(private val notificationsRepository: Notif
     /**
      * Creates a notification that notifies the user every morning.
      **/
-    override fun execute(): Completable {
-        return notificationsRepository.createDailyNotifications()
-    }
+    override fun execute(): Completable = notificationsRepository.createDailyNotifications()
 }

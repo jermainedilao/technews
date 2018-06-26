@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import jermaine.device.R
 
@@ -43,9 +44,14 @@ class DailyNotificationsAlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, 0)
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_stat_notify)
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
                 .setContentTitle(context.getString(R.string.daily_notifications_title))
                 .setContentText(context.getString(R.string.daily_notifications_message))
+                .setStyle(
+                        NotificationCompat.BigTextStyle()
+                                .bigText(context.getString(R.string.daily_notifications_message))
+                )
                 .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

@@ -171,7 +171,5 @@ class ArticlesViewModel(
     /**
      * Creates a daily notification.
      **/
-    fun createDailyNotifications() {
-        createDailyNotificationsUseCase.execute()
-    }
+    fun createDailyNotifications(): Completable = createDailyNotificationsUseCase.execute()
 }

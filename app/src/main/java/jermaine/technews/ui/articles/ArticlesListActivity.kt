@@ -70,12 +70,25 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
         // Proceed with fetching first page.
         fetchArticles.onNext(1)
 
-        viewModel.createDailyNotifications()
+        val createDailyNotification = viewModel.createDailyNotifications()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Log.d(TAG, "Successfully created daily notifications.")
+                }, {
+                    Log.e(TAG, "Error on creating daily notifications.", it)
+                })
+        compositeDisposable.add(createDailyNotification)
     }
 
     override fun onStart() {
         super.onStart()
         updateBookmarkStatusOfList()
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 
     /**
@@ -92,11 +105,6 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
                 })
 
         compositeDisposable.add(updateList)
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
-        super.onDestroy()
     }
 
     /**
