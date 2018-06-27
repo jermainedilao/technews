@@ -31,11 +31,11 @@ class NotificationsRepositoryImpl(private val context: Context) : NotificationsR
                 context, 0, intent, 0
         )
 
-        if (System.currentTimeMillis() > calendar.timeInMillis) {
-            // If the time has already passed by.
-            // Add 1 day to the date so it will trigger on the following day.
-            calendar.add(Calendar.DATE, 1)
-        }
+//        if (System.currentTimeMillis() > calendar.timeInMillis) {
+//            // If the time has already passed by.
+//            // Add 1 day to the date so it will trigger on the following day.
+//            calendar.add(Calendar.DATE, 1)
+//        }
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setInexactRepeating(
