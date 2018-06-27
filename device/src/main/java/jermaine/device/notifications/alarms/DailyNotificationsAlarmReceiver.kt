@@ -23,6 +23,27 @@ class DailyNotificationsAlarmReceiver : BroadcastReceiver() {
 
     private fun createNotificationForEarlierDevices(context: Context) {
         Log.d(TAG, "createNotificationForEarlierDevices: ")
+
+        val contentIntent = Intent("ARTICLES_LIST")
+        contentIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, 0)
+
+        val notificationBuilder = NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_stat_notify)
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                .setContentTitle(context.getString(R.string.daily_notifications_title))
+                .setContentText(context.getString(R.string.daily_notifications_message))
+                .setStyle(
+                        NotificationCompat.BigTextStyle()
+                                .bigText(context.getString(R.string.daily_notifications_message))
+                )
+                .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(DAILY_NOTIFICATION_ID, notificationBuilder.build())
     }
 
     @TargetApi(Build.VERSION_CODES.O)
