@@ -14,9 +14,11 @@ data class ArticleViewObject(
         var url: String = "",
         var urlToImage: String = "",
         var publishedAt: String = "",
+        var publishedAtDisplay: String = "",
         var bookmarked: Boolean = false,
         var bookmarkDrawableResId: Int = 0,
-        var bookmarkButtonTextResId: Int = R.string.add_text,
+        var bookmarkButtonTextResId: Int = R.string.bookmark_text,
+        var bookmarkButtonTextColorResId: Int = R.color.light_gray,
         var containerAlpha: Float = DEFAULT_STATE,
         var viewType: Int
 ) {
@@ -30,8 +32,8 @@ data class ArticleViewObject(
      **/
     fun setBookmarkDetails(bookmarked: Boolean) {
         this.bookmarked = bookmarked
-        bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_red_24dp else R.drawable.ic_bookmark_border_red_24dp
-        bookmarkButtonTextResId = if (bookmarked) R.string.remove_text else R.string.add_text
+        bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_blue_24dp else R.drawable.ic_bookmark_border_gray_24dp
+        bookmarkButtonTextColorResId = if (bookmarked) R.color.blue else R.color.light_gray
     }
 
     fun toDomainRepresentation(): Article = Article(

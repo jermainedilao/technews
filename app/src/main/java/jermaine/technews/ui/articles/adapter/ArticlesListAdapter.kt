@@ -57,6 +57,7 @@ class ArticlesListAdapter(
                 holder.setTitle(item.title)
                 holder.setDescription(item.description)
                 holder.setSource(item.source.name)
+                holder.setPublishedAt(item.publishedAtDisplay)
                 holder.itemView.setOnClickListener {
                     clickEvent.onNext(item)
                 }
@@ -66,6 +67,7 @@ class ArticlesListAdapter(
 
                 holder.setBookmarkIcon(item.bookmarkDrawableResId)
                 holder.setBookMarkButtonText(item.bookmarkButtonTextResId)
+                holder.setBookmarkButtonTextColor(item.bookmarkButtonTextColorResId)
                 holder.setContainerAlpha(item.containerAlpha)
 
                 if (position == articles.size - 1) {
@@ -137,8 +139,8 @@ class ArticlesListAdapter(
      **/
     fun bookmarkArticle(position: Int, item: ArticleViewObject): Completable {
         item.bookmarked = true
-        item.bookmarkDrawableResId = R.drawable.ic_bookmark_red_24dp
-        item.bookmarkButtonTextResId = R.string.remove_text
+        item.bookmarkDrawableResId = R.drawable.ic_bookmark_blue_24dp
+        item.bookmarkButtonTextColorResId = R.color.blue
         articles[position] = item
         notifyItemChanged(position)
 
@@ -153,8 +155,8 @@ class ArticlesListAdapter(
      **/
     fun removeBookmarkedArticle(position: Int, item: ArticleViewObject): Completable {
         item.bookmarked = false
-        item.bookmarkDrawableResId = R.drawable.ic_bookmark_border_red_24dp
-        item.bookmarkButtonTextResId = R.string.add_text
+        item.bookmarkDrawableResId = R.drawable.ic_bookmark_border_gray_24dp
+        item.bookmarkButtonTextColorResId = R.color.light_gray
         articles[position] = item
         notifyItemChanged(position)
 

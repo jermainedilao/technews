@@ -57,6 +57,7 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
         super.onCreate(savedInstanceState)
         getComponent().inject(this)
         setContentView(R.layout.activity_articles_list)
+        setSupportActionBar(toolbar)
 
         compositeDisposable = CompositeDisposable()
         fetchArticles = PublishSubject.create()

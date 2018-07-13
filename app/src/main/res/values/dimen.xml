@@ -3,6 +3,13 @@
     <dimen name="list_item_card_horizontal_margin">16dp</dimen>
     <dimen name="list_item_card_vertical_margin">8dp</dimen>
 
+    <dimen name="list_item_card_padding_half">8dp</dimen>
+    <dimen name="list_item_card_padding">16dp</dimen>
+
+    <dimen name="line_spacing">8dp</dimen>
+
     <dimen name="text_size_small">10sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
 </resources>

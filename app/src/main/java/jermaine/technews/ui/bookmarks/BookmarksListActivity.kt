@@ -41,6 +41,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_articles_list)
         getComponent().inject(this)
+        setSupportActionBar(toolbar)
 
         compositeDisposable = CompositeDisposable()
 

@@ -9,7 +9,7 @@ data class Article(
         var description: String = "",
         var url: String = "",
         var urlToImage: String = "",
-        var publishedAt: String = "",
+        var publishedAt: String = "", 
         var bookmarked: Boolean = false
 ) {
     companion object {
