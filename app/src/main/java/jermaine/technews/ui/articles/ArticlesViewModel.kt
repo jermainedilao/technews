@@ -1,5 +1,6 @@
 package jermaine.technews.ui.articles
 
+import android.content.Context
 import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -17,6 +18,7 @@ import jermaine.technews.ui.articles.util.ViewObjectParser
 
 
 class ArticlesViewModel(
+        private val context: Context,
         private val fetchArticlesListUseCase: FetchArticlesListUseCase,
         private val bookmarkArticleUseCase: BookmarkArticleUseCase,
         private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
@@ -61,7 +63,7 @@ class ArticlesViewModel(
                     Observable.fromIterable(it)
                 }
                 .map {
-                    ViewObjectParser.articleToViewObjectRepresentation(it)
+                    ViewObjectParser.articleToViewObjectRepresentation(it, context)
                 }
                 .toList()
                 .flatMap {
@@ -127,7 +129,7 @@ class ArticlesViewModel(
                         Observable.fromIterable(it)
                     }
                     .map {
-                        ViewObjectParser.articleToViewObjectRepresentation(it)
+                        ViewObjectParser.articleToViewObjectRepresentation(it, context)
                     }
                     .toList()
 

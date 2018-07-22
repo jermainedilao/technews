@@ -27,7 +27,6 @@ And you're all set!
 * [Firebase Crashlytics](https://firebase.google.com/docs/crashlytics/) - For crash reporting.
 
 ### Todo
-* Notify users every morning to read technews
 * Build unit tests
 * Local pagination in Bookmarks screen
 * Add sources screen to allow users to pick news sources that they want.

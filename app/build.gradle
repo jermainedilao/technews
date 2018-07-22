@@ -14,6 +14,9 @@ def keyStoreProperties = new Properties()
 keyStoreProperties.load(new FileInputStream(keyStorePropertiesFile))
 
 android {
+    dataBinding {
+        enabled = true
+    }
     signingConfigs {
         config {
             keyAlias keyStoreProperties['KEY_ALIAS']
@@ -66,11 +69,11 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_compiler_version"
 
-    compile 'com.google.firebase:firebase-core:16.0.1'
-    compile 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     // An adaptation of the JSR-310 backport for Android.
-    compile 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

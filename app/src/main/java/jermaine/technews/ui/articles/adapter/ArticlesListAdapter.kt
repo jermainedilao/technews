@@ -7,15 +7,18 @@ import android.view.ViewGroup
 import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
+import jermaine.technews.databinding.ViewHolderArticleBinding
 import jermaine.technews.ui.articles.ArticleViewHolder
 import jermaine.technews.ui.articles.model.ArticleViewObject
+import jermaine.technews.ui.widgets.listwidgets.LoaderViewHolder
+import jermaine.technews.ui.widgets.listwidgets.NewsApiAttributionViewHolder
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
 class ArticlesListAdapter(
         private var articles: MutableList<ArticleViewObject>,
         private val onLastItemCallback: OnLastItemCallback
-) : RecyclerView.Adapter<ArticleViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val VIEW_TYPE_ARTICLE = 0
         const val VIEW_TYPE_LOADER = 1
@@ -35,40 +38,39 @@ class ArticlesListAdapter(
     override fun getItemViewType(position: Int): Int =
             articles[position].viewType
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-        val view = when (viewType) {
-            VIEW_TYPE_LOADER ->
-                LayoutInflater.from(parent.context).inflate(R.layout.loader, parent, false)
-            VIEW_TYPE_ATTRIBUTION ->
-                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_attribution, parent, false)
-            else ->
-                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_article, parent, false)
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
 
-        return ArticleViewHolder(parent.context, view)
+        return when (viewType) {
+            VIEW_TYPE_LOADER ->
+                LoaderViewHolder(inflater.inflate(R.layout.loader, parent, false))
+            VIEW_TYPE_ATTRIBUTION ->
+                NewsApiAttributionViewHolder(inflater.inflate(
+                        R.layout.view_holder_attribution, parent, false
+                ))
+            else ->
+                ArticleViewHolder(ViewHolderArticleBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                ))
+        }
     }
 
-    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = articles[position]
 
         when (getItemViewType(position)) {
             VIEW_TYPE_ARTICLE -> {
-                holder.setImage(item.urlToImage)
-                holder.setTitle(item.title)
-                holder.setDescription(item.description)
-                holder.setSource(item.source.name)
-                holder.setPublishedAt(item.publishedAtDisplay)
-                holder.itemView.setOnClickListener {
-                    clickEvent.onNext(item)
+                (holder as ArticleViewHolder).apply {
+                    bind(
+                            item,
+                            onArticleClick = View.OnClickListener {
+                                clickEvent.onNext(item)
+                            },
+                            onBookmarkClick = View.OnClickListener {
+                                bookmarkEvent.onNext(Pair(position, item))
+                            }
+                    )
                 }
-                holder.setBookmarkListener(View.OnClickListener {
-                    bookmarkEvent.onNext(Pair(position, item))
-                })
-
-                holder.setBookmarkIcon(item.bookmarkDrawableResId)
-                holder.setBookMarkButtonText(item.bookmarkButtonTextResId)
-                holder.setBookmarkButtonTextColor(item.bookmarkButtonTextColorResId)
-                holder.setContainerAlpha(item.containerAlpha)
 
                 if (position == articles.size - 1) {
                     onLastItemCallback.onLastItem()

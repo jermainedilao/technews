@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="elapsedTimeDays">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+
+    <plurals name="elapsedTimeHours">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+
+    <plurals name="elapsedTimeMinutes">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+
+    <plurals name="elapsedTimeSeconds">
+        <item quantity="other">A few seconds ago</item>
+    </plurals>
+</resources>

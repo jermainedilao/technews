@@ -1,5 +1,6 @@
 package jermaine.technews.di.module
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
@@ -16,13 +17,14 @@ class ViewModelModule {
     @Singleton
     @Provides
     fun providesArticlesViewModel(
+            context: Context,
             fetchArticlesListUseCase: FetchArticlesListUseCase,
             bookmarkArticleUseCase: BookmarkArticleUseCase,
             fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
             removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,
             createDailyNotificationsUseCase: CreateDailyNotificationsUseCase
     ): ArticlesViewModel = ArticlesViewModel(
-            fetchArticlesListUseCase, bookmarkArticleUseCase,
+            context, fetchArticlesListUseCase, bookmarkArticleUseCase,
             fetchBookmarkedArticleUseCase, removeBookmarkedArticleUseCase,
             createDailyNotificationsUseCase
     )
