@@ -3,11 +3,16 @@ package jermaine.domain.notifications.interactors
 import io.reactivex.Completable
 import jermaine.domain.interactortype.CompletableUseCase
 import jermaine.domain.notifications.NotificationsRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class CreateDailyNotificationsUseCase(private val notificationsRepository: NotificationsRepository) : CompletableUseCase {
-    /**
-     * Creates a notification that notifies the user every morning.
-     **/
+/**
+ * Use case responsible for creating a notification that notifies the user every morning.
+ **/
+@Singleton
+class CreateDailyNotificationsUseCase @Inject constructor(
+        private val notificationsRepository: NotificationsRepository
+) : CompletableUseCase {
     override fun execute(): Completable = notificationsRepository.createDailyNotifications()
 }

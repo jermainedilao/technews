@@ -15,9 +15,12 @@ import jermaine.domain.notifications.interactors.CreateDailyNotificationsUseCase
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.util.ViewObjectParser
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class ArticlesViewModel(
+@Singleton
+class ArticlesViewModel @Inject constructor(
         private val context: Context,
         private val fetchArticlesListUseCase: FetchArticlesListUseCase,
         private val bookmarkArticleUseCase: BookmarkArticleUseCase,

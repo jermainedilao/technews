@@ -7,9 +7,14 @@ import jermaine.data.articles.db.ArticlesDao
 import jermaine.data.articles.service.ArticlesService
 import jermaine.domain.articles.ArticlesRepository
 import jermaine.domain.articles.model.Article
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ArticlesRepositoryImpl(private val articlesService: ArticlesService,
-                             private val articlesDao: ArticlesDao) : ArticlesRepository {
+@Singleton
+class ArticlesRepositoryImpl @Inject constructor(
+        private val articlesService: ArticlesService,
+        private val articlesDao: ArticlesDao
+) : ArticlesRepository {
 
     override fun fetchArticles(page: Int): Single<List<Article>> =
             articlesService.fetchArticles(page)

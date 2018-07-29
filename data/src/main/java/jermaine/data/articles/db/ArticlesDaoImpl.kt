@@ -7,9 +7,11 @@ import io.reactivex.schedulers.Schedulers
 import jermaine.data.articles.db.room.ArticleRoomDao
 import jermaine.data.articles.db.util.DataObjectParser
 import jermaine.domain.articles.model.Article
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class ArticlesDaoImpl(private val articleRoomDao: ArticleRoomDao) : ArticlesDao {
+@Singleton class ArticlesDaoImpl @Inject constructor(private val articleRoomDao: ArticleRoomDao) : ArticlesDao {
     override fun fetchAllBookmarkedArticles(): Single<List<Article>> =
             articleRoomDao.fetchArticles()
                     .subscribeOn(Schedulers.io())

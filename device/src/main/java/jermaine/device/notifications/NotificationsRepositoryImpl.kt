@@ -9,9 +9,11 @@ import io.reactivex.Completable
 import jermaine.device.notifications.alarms.DailyNotificationsAlarmReceiver
 import jermaine.domain.notifications.NotificationsRepository
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class NotificationsRepositoryImpl(private val context: Context) : NotificationsRepository {
+@Singleton
+class NotificationsRepositoryImpl @Inject constructor(private val context: Context) : NotificationsRepository {
     companion object {
         const val TAG = "NotificationsRepository"
     }

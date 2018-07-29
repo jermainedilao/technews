@@ -4,9 +4,17 @@ import io.reactivex.Completable
 import jermaine.domain.articles.ArticlesRepository
 import jermaine.domain.articles.model.Article
 import jermaine.domain.interactortype.CompletableWithParamUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class RemoveBookmarkedArticleUseCase(private val articlesRepository: ArticlesRepository) : CompletableWithParamUseCase<Article> {
+/**
+ * Use case responsible for unbookmarking article.
+ **/
+@Singleton
+class RemoveBookmarkedArticleUseCase @Inject constructor(
+        private val articlesRepository: ArticlesRepository
+) : CompletableWithParamUseCase<Article> {
     override fun execute(article: Article): Completable =
             articlesRepository.removeBookmarkedArticle(article)
 }
