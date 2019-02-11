@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -28,10 +28,10 @@ dependencies {
     implementation project(':domain')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     api "com.google.code.gson:gson:$gson_version"
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -39,11 +39,11 @@ dependencies {
     api "com.squareup.retrofit2:adapter-rxjava2:$rxadapter_version"
 
     // room
-    api "android.arch.persistence.room:runtime:1.0.0"
-    kapt "android.arch.persistence.room:compiler:1.0.0"
+    api "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
 
     // rxjava2 support for room
-    api "android.arch.persistence.room:rxjava2:1.0.0"
+    api "android.arch.persistence.room:rxjava2:1.1.1"
 
     // Dagger annotation processor
     kapt "com.google.dagger:dagger-compiler:$dagger_compiler_version"

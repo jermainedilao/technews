@@ -1,6 +1,7 @@
 package jermaine.technews.di.component
 
 import android.app.Application
+import dagger.BindsInstance
 import dagger.Component
 import jermaine.data.di.module.DatabaseModule
 import jermaine.data.di.module.NetworkModule
@@ -27,14 +28,28 @@ interface AppComponent {
     companion object {
         fun initialize(app: Application): AppComponent =
                 DaggerAppComponent.builder()
-                        .appModule(AppModule(app))
+                        .app(app)
                         .repositoryModule(RepositoryModule())
-                        .serviceModule(ServiceModule(app))
+                        .serviceModule(ServiceModule())
                         .useCaseModule(UseCaseModule())
-                        .networkModule(NetworkModule(app))
-                        .databaseModule(DatabaseModule(app))
+                        .networkModule(NetworkModule())
+                        .databaseModule(DatabaseModule())
                         .daoModule(DaoModule())
                         .build()
+    }
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun app(app: Application): Builder
+
+        fun build(): AppComponent
+        fun repositoryModule(module: RepositoryModule): Builder
+        fun serviceModule(module: ServiceModule): Builder
+        fun useCaseModule(module: UseCaseModule): Builder
+        fun networkModule(module: NetworkModule): Builder
+        fun databaseModule(module: DatabaseModule): Builder
+        fun daoModule(module: DaoModule): Builder
     }
 
     fun inject(articlesListActivity: ArticlesListActivity)

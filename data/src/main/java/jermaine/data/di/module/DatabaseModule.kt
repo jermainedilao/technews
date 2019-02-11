@@ -9,10 +9,10 @@ import jermaine.data.db.AppDatabase
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule(val app: Application) {
+class DatabaseModule {
     @Provides
     @Singleton
-    fun providesAppDatabase(): AppDatabase = Room.databaseBuilder(
+    fun providesAppDatabase(app: Application): AppDatabase = Room.databaseBuilder(
             app, AppDatabase::class.java, AppDatabase.DATABASE_NAME
     ).build()
 

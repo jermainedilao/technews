@@ -13,10 +13,10 @@ import javax.inject.Singleton
 
 
 @Module
-class NetworkModule(val app: Application) {
+class NetworkModule {
     @Singleton
     @Provides
-    fun provideOkHttpCache(): Cache {
+    fun provideOkHttpCache(app: Application): Cache {
         val cacheSize = (10 * 1024 * 1024).toLong() // 10 MiB
         return Cache(app.cacheDir, cacheSize)
     }
