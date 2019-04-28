@@ -10,9 +10,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
-import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.util.ViewObjectParser
+import jermaine.technews.util.VIEW_TYPE_ARTICLE
+import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
 
 
 class ArticlesDataSource(
@@ -126,7 +127,7 @@ class ArticlesDataSource(
                             .filter {
                                 article.id.contentEquals(it.id)
                             }
-                            .first(ArticleViewObject(id = "none", viewType = ArticlesListAdapter.VIEW_TYPE_ARTICLE))
+                            .first(ArticleViewObject(id = "none", viewType = VIEW_TYPE_ARTICLE))
                             .map {
                                 val bookmarked = !it.id.contentEquals("none")
 
@@ -161,7 +162,7 @@ class ArticlesDataSource(
      * Adds News API attribution at the beginning of the list.
      */
     private fun addAttribution(list: MutableList<ArticleViewObject>) {
-        val item = ArticleViewObject(viewType = ArticlesListAdapter.VIEW_TYPE_ATTRIBUTION)
+        val item = ArticleViewObject(viewType = VIEW_TYPE_ATTRIBUTION)
         item.url = "https://newsapi.org"
         list.add(0, item)
     }

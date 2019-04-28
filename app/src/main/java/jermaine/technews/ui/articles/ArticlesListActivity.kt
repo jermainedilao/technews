@@ -18,7 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
-import jermaine.technews.ui.articles.adapter.ArticleListAdapterNew
+import jermaine.technews.ui.articles.adapter.ArticlesListAdapterNew
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
@@ -35,7 +35,7 @@ class ArticlesListActivity : BaseActivity() {
     lateinit var viewModel: ArticlesViewModel
 
     private lateinit var compositeDisposable: CompositeDisposable
-    private lateinit var adapter: ArticleListAdapterNew
+    private lateinit var adapter: ArticlesListAdapterNew
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +82,7 @@ class ArticlesListActivity : BaseActivity() {
      * Initializes the recycler view boiler plate.
      **/
     private fun initializeList() {
-        adapter = ArticleListAdapterNew()
+        adapter = ArticlesListAdapterNew()
         val manager = LinearLayoutManager(this)
 
         val itemClick = adapter.clickEvent

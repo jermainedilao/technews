@@ -4,8 +4,8 @@ import android.content.Context
 import jermaine.domain.articles.model.Article
 import jermaine.domain.articles.util.ArticleUtil
 import jermaine.technews.R
-import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
+import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
@@ -29,7 +29,7 @@ object ViewObjectParser {
                 bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_blue_24dp else R.drawable.ic_bookmark_border_gray_24dp,
                 bookmarkButtonTextResId = R.string.bookmark_text,
                 bookmarkButtonTextColorResId = if (bookmarked) R.color.blue else R.color.light_gray,
-                viewType = ArticlesListAdapter.VIEW_TYPE_ARTICLE
+                viewType = VIEW_TYPE_ARTICLE
             )
         }
 

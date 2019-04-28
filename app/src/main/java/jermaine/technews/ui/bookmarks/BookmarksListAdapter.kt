@@ -1,4 +1,4 @@
-package jermaine.technews.ui.articles.adapter
+package jermaine.technews.ui.bookmarks
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,19 +12,16 @@ import jermaine.technews.ui.articles.ArticleViewHolder
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.widgets.listwidgets.LoaderViewHolder
 import jermaine.technews.ui.widgets.listwidgets.NewsApiAttributionViewHolder
+import jermaine.technews.util.VIEW_TYPE_ARTICLE
+import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
+import jermaine.technews.util.VIEW_TYPE_LOADER
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
-class ArticlesListAdapter(
+class BookmarksListAdapter(
     private var articles: MutableList<ArticleViewObject>,
     private val onLastItemCallback: OnLastItemCallback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    companion object {
-        const val VIEW_TYPE_ARTICLE = 0
-        const val VIEW_TYPE_LOADER = 1
-        const val VIEW_TYPE_ATTRIBUTION = 2
-    }
-
     /**
      * Emits the item being clicked from the list view.
      **/
