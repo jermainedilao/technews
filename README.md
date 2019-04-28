@@ -23,6 +23,7 @@ And you're all set!
 * [Gson](https://github.com/google/gson) - For serializing/deserializing JSON objects.
 * [RxJava 2](https://github.com/ReactiveX/RxJava)
 * [Room](https://developer.android.com/topic/libraries/architecture/room.html) - For persisting data.
+* [Paging](https://developer.android.com/topic/libraries/architecture/paging) - For pagination.
 * [Glide](https://bumptech.github.io/glide/) - Image loading library.
 * [Firebase Crashlytics](https://firebase.google.com/docs/crashlytics/) - For crash reporting.
 
