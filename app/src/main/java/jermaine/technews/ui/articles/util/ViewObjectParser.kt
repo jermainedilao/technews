@@ -14,24 +14,24 @@ import java.util.concurrent.TimeUnit
 
 object ViewObjectParser {
     fun articleToViewObjectRepresentation(article: Article, context: Context): ArticleViewObject =
-            with(article) {
-                ArticleViewObject(
-                        id = ArticleUtil.getIdValue(article),
-                        source = source,
-                        author = author,
-                        title = title,
-                        description = description,
-                        url = url,
-                        urlToImage = urlToImage,
-                        publishedAt = publishedAt,
-                        publishedAtDisplay = getPublishedAtDisplay(publishedAt, context),
-                        bookmarked = bookmarked,
-                        bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_blue_24dp else R.drawable.ic_bookmark_border_gray_24dp,
-                        bookmarkButtonTextResId = R.string.bookmark_text,
-                        bookmarkButtonTextColorResId = if (bookmarked) R.color.blue else R.color.light_gray,
-                        viewType = ArticlesListAdapter.VIEW_TYPE_ARTICLE
-                )
-            }
+        with(article) {
+            ArticleViewObject(
+                id = ArticleUtil.getIdValue(article),
+                source = source,
+                author = author,
+                title = title,
+                description = description,
+                url = url,
+                urlToImage = urlToImage,
+                publishedAt = publishedAt,
+                publishedAtDisplay = getPublishedAtDisplay(publishedAt, context),
+                bookmarked = bookmarked,
+                bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_blue_24dp else R.drawable.ic_bookmark_border_gray_24dp,
+                bookmarkButtonTextResId = R.string.bookmark_text,
+                bookmarkButtonTextColorResId = if (bookmarked) R.color.blue else R.color.light_gray,
+                viewType = ArticlesListAdapter.VIEW_TYPE_ARTICLE
+            )
+        }
 
     /**
      * Returns elapsed time since publishedAt.

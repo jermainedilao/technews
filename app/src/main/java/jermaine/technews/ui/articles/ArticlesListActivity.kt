@@ -1,5 +1,7 @@
 package jermaine.technews.ui.articles
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.Transformations
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,16 +18,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
-import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
+import jermaine.technews.ui.articles.adapter.ArticleListAdapterNew
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
-import jermaine.technews.util.callbacks.OnLastItemCallback
 import kotlinx.android.synthetic.main.activity_articles_list.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
+class ArticlesListActivity : BaseActivity() {
     companion object {
         val TAG = "ArticlesListActivity"
     }
@@ -34,24 +35,7 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
     lateinit var viewModel: ArticlesViewModel
 
     private lateinit var compositeDisposable: CompositeDisposable
-
-    /**
-     * Emits new list of articles.
-     * Requires "page" (used for pagination) as parameter.
-     **/
-    private lateinit var fetchArticles: PublishSubject<Int>
-
-    /**
-     * Page for pagination.
-     **/
-    private var page: Int = 1
-
-    /**
-     * True, if we should fetch next page. False if not.
-     **/
-    private var shouldFetchNextPage: Boolean = true
-
-    private lateinit var adapter: ArticlesListAdapter
+    private lateinit var adapter: ArticleListAdapterNew
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,31 +44,33 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
         setSupportActionBar(toolbar)
 
         compositeDisposable = CompositeDisposable()
-        fetchArticles = PublishSubject.create()
 
         initializeList()
         setSwipeRefreshListener()
         setLoadingIndicators()
 
-        initializeFetchArticles()
+        // Fetch articles
+        viewModel.articlesListLiveData.observe(this, Observer {
+            adapter.submitList(it)
+        })
 
-        // Proceed with fetching first page.
-        fetchArticles.onNext(1)
+        createDailyNotification()
+    }
 
+    private fun createDailyNotification() {
         val createDailyNotification = viewModel.createDailyNotifications()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Log.d(TAG, "Successfully created daily notifications.")
-                }, {
-                    Log.e(TAG, "Error on creating daily notifications.", it)
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d(TAG, "Successfully created daily notifications.")
+            }, {
+                Log.e(TAG, "Error on creating daily notifications.", it)
+            })
         compositeDisposable.add(createDailyNotification)
     }
 
     override fun onStart() {
         super.onStart()
-        updateBookmarkStatusOfList()
     }
 
     override fun onDestroy() {
@@ -93,41 +79,26 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
     }
 
     /**
-     * Updates the bookmark status of the items inside the currently displayed list.
-     **/
-    private fun updateBookmarkStatusOfList() {
-        val updateList = viewModel.updateBookMarkStatusFromList(adapter.getItems())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    adapter.newList(it)
-                }, {
-                    Log.e(TAG, "onStart", it)
-                })
-
-        compositeDisposable.add(updateList)
-    }
-
-    /**
      * Initializes the recycler view boiler plate.
      **/
     private fun initializeList() {
-        adapter = ArticlesListAdapter(arrayListOf(), this)
+        adapter = ArticleListAdapterNew()
         val manager = LinearLayoutManager(this)
 
         val itemClick = adapter.clickEvent
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    startBrowser(it.url)
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                startBrowser(it.url)
+            }
+
         val bookmark = adapter.bookmarkEvent
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMapCompletable {
-                    bookmarkOrUnBookmarkArticle(it)
-                }
-                .subscribe {
-                    Log.d(TAG, "Done bookmarking/removing bookmark article.")
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .concatMapCompletable {
+                bookmarkOrUnBookmarkArticle(it)
+            }
+            .subscribe {
+                Log.d(TAG, "Done bookmarking/removing bookmark article.")
+            }
 
         compositeDisposable.addAll(itemClick, bookmark)
 
@@ -157,34 +128,34 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
         // If bookmarking takes less than 200 milliseconds
         // don't mind setting its item to its loading state.
         val disposable = loadingState
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    Log.d(TAG, "loading state: $it")
-                    if (it) {
-                        adapter.setLoadingState(position, item)
-                    } else {
-                        adapter.setDefaultState(position, item)
-                    }
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.d(TAG, "loading state: $it")
+                if (it) {
+                    adapter.setLoadingState(position)
+                } else {
+                    adapter.setDefaultState(position)
                 }
+            }
         compositeDisposable.add(disposable)
 
         loadingState.onNext(true)
 
         return if (item.bookmarked) {
             viewModel.removeBookmarkedArticle(item)
-                    .andThen(adapter.removeBookmarkedArticle(position, item))
-                    .doOnComplete {
-                        loadingState.onNext(false)
-                        Log.d(TAG, "Done removing bookmark from article.")
-                    }
+                .andThen(adapter.removeBookmarkedArticle(position))
+                .doOnComplete {
+                    loadingState.onNext(false)
+                    Log.d(TAG, "Done removing bookmark from article.")
+                }
         } else {
             viewModel.bookmarkArticle(item)
-                    .andThen(adapter.bookmarkArticle(position, item))
-                    .doOnComplete {
-                        loadingState.onNext(false)
-                        Log.d(TAG, "Done bookmarking article.")
-                    }
+                .andThen(adapter.bookmarkArticle(position))
+                .doOnComplete {
+                    loadingState.onNext(false)
+                    Log.d(TAG, "Done bookmarking article.")
+                }
         }
     }
 
@@ -193,86 +164,32 @@ class ArticlesListActivity : BaseActivity(), OnLastItemCallback {
      **/
     private fun setSwipeRefreshListener() {
         swipe_refresh_layout.setOnRefreshListener {
-            // Reset page to 1.
-            page = 1
-            fetchArticles.onNext(page)
+            viewModel.articlesDataSourceFactory.articlesDataSourceLiveData.value!!.invalidate()
         }
     }
 
+    /**
+     * Responsible for showing the refresh and paginate indicator in UI.
+     **/
     private fun setLoadingIndicators() {
-        /**
-         * Responsible for showing the refresh indicator.
-         **/
-        val refreshIndicator = viewModel.refreshIndicator
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    swipe_refresh_layout.isRefreshing = it
-                }
+        // Responsible for showing the refresh indicator.
+        Transformations.switchMap(
+            viewModel.articlesDataSourceFactory.articlesDataSourceLiveData
+        ) {
+            it.refreshState
+        }.observe(this, Observer { refreshing ->
+            swipe_refresh_layout.isRefreshing = refreshing!!
+        })
 
-        /**
-         * Responsible for showing the pagination indicator.
-         **/
-        val paginateIndicator = viewModel.paginateIndicator
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (it) {
-                        val lastItemViewType = adapter.getItemViewType(adapter.itemCount - 1)
-                        if (lastItemViewType == ArticlesListAdapter.VIEW_TYPE_ARTICLE) {
-                            adapter.showPaginateIndicator()
-                        }
-                    } else {
-                        adapter.hidePaginateIndicator()
-                    }
-                }
 
-        compositeDisposable.addAll(refreshIndicator, paginateIndicator)
-    }
-
-    override fun onLastItem() {
-        if (shouldFetchNextPage) {
-            Log.d(TAG, "onLastItem: ")
-            fetchArticles.onNext(++page)
-        }
-    }
-
-    /**
-     * Subscribes fetch articles subject. This method is responsible
-     * for displaying the emitted lists to the view.
-     **/
-    private fun initializeFetchArticles() {
-        val disposable = fetchArticles
-                .flatMapSingle {
-                    viewModel.fetchArticles(it)
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    // Wait until the current request is done.
-                    shouldFetchNextPage = false
-                }
-                .doOnNext {
-                    shouldFetchNextPage = !it.isEmpty()
-                }
-                .subscribe({
-                    updateList(it)
-                }, {
-                    Log.e(TAG, "onCreate", it)
-                    throw it
-                })
-
-        compositeDisposable.add(disposable)
-    }
-
-    /**
-     * Updates the currently displayed list.
-     * If page == 1, replaces the currently displayed list with the new list.
-     * Else, appends the new list at the end of the currently displayed list.
-     **/
-    private fun updateList(articles: List<ArticleViewObject>) {
-        if (page == 1) {
-            adapter.newList(articles)
-        } else {
-            adapter.append(articles)
-        }
+        // Responsible for showing the paginate indicator.
+        Transformations.switchMap(
+            viewModel.articlesDataSourceFactory.articlesDataSourceLiveData
+        ) {
+            it.paginateState
+        }.observe(this, Observer { paginate ->
+            adapter.setPaginateState(paginate!!)
+        })
     }
 
     /**
