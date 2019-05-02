@@ -33,20 +33,20 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    api "com.google.code.gson:gson:$gson_version"
-    api "com.squareup.retrofit2:retrofit:$retrofit_version"
-    api "com.squareup.retrofit2:converter-gson:$gson_converter_version"
-    api "com.squareup.retrofit2:adapter-rxjava2:$rxadapter_version"
+    api Libs.gson
+    api Libs.retrofit
+    api Libs.gsonConverter
+    api Libs.rxAdapter
 
     // room
-    api "android.arch.persistence.room:runtime:1.1.1"
-    kapt "android.arch.persistence.room:compiler:1.1.1"
+    api Libs.room
+    kapt Libs.roomCompiler
 
     // rxjava2 support for room
-    api "android.arch.persistence.room:rxjava2:1.1.1"
+    api Libs.roomRxJava
 
     // Dagger annotation processor
-    kapt "com.google.dagger:dagger-compiler:$dagger_compiler_version"
+    kapt Libs.daggerCompiler
 }
 repositories {
     mavenCentral()
