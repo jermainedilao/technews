@@ -1,5 +1,6 @@
 package jermaine.technews.ui.articles.model
 
+import android.support.v7.util.DiffUtil
 import jermaine.domain.articles.model.Article
 import jermaine.domain.articles.model.Source
 import jermaine.technews.R
@@ -25,6 +26,16 @@ data class ArticleViewObject(
     companion object {
         const val DEFAULT_STATE = 1.0F
         const val LOADING_STATE = 0.6F
+
+        val diffCallback = object: DiffUtil.ItemCallback<ArticleViewObject>() {
+            override fun areItemsTheSame(p0: ArticleViewObject, p1: ArticleViewObject): Boolean {
+                return p0.id == p1.id && p0.bookmarked == p1.bookmarked
+            }
+
+            override fun areContentsTheSame(p0: ArticleViewObject, p1: ArticleViewObject): Boolean {
+                return p0.id == p1.id && p0.bookmarked == p1.bookmarked
+            }
+        }
     }
 
     /**

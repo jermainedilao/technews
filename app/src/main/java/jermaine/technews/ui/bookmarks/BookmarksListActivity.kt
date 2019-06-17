@@ -12,7 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import jermaine.technews.R
 import jermaine.technews.ui.articles.ArticlesViewModel
-import jermaine.technews.ui.articles.adapter.ArticlesListAdapter
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.util.callbacks.OnLastItemCallback
@@ -34,7 +33,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
      **/
     private var page: Int = 1
 
-    private lateinit var adapter: ArticlesListAdapter
+    private lateinit var adapter: BookmarksListAdapter
     private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +68,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
      * Initializes the recycler view boiler plate.
      **/
     private fun initializeList() {
-        adapter = ArticlesListAdapter(arrayListOf(), this)
+        adapter = BookmarksListAdapter(arrayListOf(), this)
         val manager = LinearLayoutManager(this)
 
         val itemClick = adapter.clickEvent

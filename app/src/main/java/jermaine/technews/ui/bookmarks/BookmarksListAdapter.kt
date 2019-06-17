@@ -1,4 +1,4 @@
-package jermaine.technews.ui.articles.adapter
+package jermaine.technews.ui.bookmarks
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,19 +12,16 @@ import jermaine.technews.ui.articles.ArticleViewHolder
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.widgets.listwidgets.LoaderViewHolder
 import jermaine.technews.ui.widgets.listwidgets.NewsApiAttributionViewHolder
+import jermaine.technews.util.VIEW_TYPE_ARTICLE
+import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
+import jermaine.technews.util.VIEW_TYPE_LOADER
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
 
-class ArticlesListAdapter(
-        private var articles: MutableList<ArticleViewObject>,
-        private val onLastItemCallback: OnLastItemCallback
+class BookmarksListAdapter(
+    private var articles: MutableList<ArticleViewObject>,
+    private val onLastItemCallback: OnLastItemCallback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    companion object {
-        const val VIEW_TYPE_ARTICLE = 0
-        const val VIEW_TYPE_LOADER = 1
-        const val VIEW_TYPE_ATTRIBUTION = 2
-    }
-
     /**
      * Emits the item being clicked from the list view.
      **/
@@ -36,7 +33,7 @@ class ArticlesListAdapter(
     val bookmarkEvent: PublishSubject<Pair<Int, ArticleViewObject>> = PublishSubject.create()
 
     override fun getItemViewType(position: Int): Int =
-            articles[position].viewType
+        articles[position].viewType
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -45,13 +42,17 @@ class ArticlesListAdapter(
             VIEW_TYPE_LOADER ->
                 LoaderViewHolder(inflater.inflate(R.layout.loader, parent, false))
             VIEW_TYPE_ATTRIBUTION ->
-                NewsApiAttributionViewHolder(inflater.inflate(
+                NewsApiAttributionViewHolder(
+                    inflater.inflate(
                         R.layout.view_holder_attribution, parent, false
-                ))
+                    )
+                )
             else ->
-                ArticleViewHolder(ViewHolderArticleBinding.inflate(
+                ArticleViewHolder(
+                    ViewHolderArticleBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
-                ))
+                    )
+                )
         }
     }
 
@@ -62,13 +63,13 @@ class ArticlesListAdapter(
             VIEW_TYPE_ARTICLE -> {
                 (holder as ArticleViewHolder).apply {
                     bind(
-                            item,
-                            onArticleClick = View.OnClickListener {
-                                clickEvent.onNext(item)
-                            },
-                            onBookmarkClick = View.OnClickListener {
-                                bookmarkEvent.onNext(Pair(position, item))
-                            }
+                        item,
+                        onArticleClick = View.OnClickListener {
+                            clickEvent.onNext(item)
+                        },
+                        onBookmarkClick = View.OnClickListener {
+                            bookmarkEvent.onNext(Pair(position, item))
+                        }
                     )
                 }
 
