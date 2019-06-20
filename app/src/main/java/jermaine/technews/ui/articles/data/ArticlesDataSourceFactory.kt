@@ -1,8 +1,8 @@
 package jermaine.technews.ui.articles.data
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.DataSource
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
 import jermaine.technews.ui.articles.model.ArticleViewObject

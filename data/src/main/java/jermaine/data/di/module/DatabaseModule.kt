@@ -1,7 +1,7 @@
 package jermaine.data.di.module
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import jermaine.data.articles.db.room.ArticleRoomDao

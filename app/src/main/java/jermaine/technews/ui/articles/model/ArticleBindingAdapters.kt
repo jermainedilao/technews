@@ -1,9 +1,9 @@
 package jermaine.technews.ui.articles.model
 
-import android.databinding.BindingAdapter
-import android.support.v4.content.ContextCompat
 import android.widget.Button
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import jermaine.technews.ui.util.GlideApp
 

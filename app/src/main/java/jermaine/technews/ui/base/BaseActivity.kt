@@ -1,7 +1,7 @@
 package jermaine.technews.ui.base
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import jermaine.technews.application.App
 
 

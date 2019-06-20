@@ -1,8 +1,8 @@
 package jermaine.data.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import jermaine.data.articles.db.model.ArticleModel
 import jermaine.data.articles.db.room.ArticleRoomDao
 

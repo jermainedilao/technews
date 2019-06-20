@@ -1,10 +1,10 @@
 package jermaine.technews.ui.articles.adapter
 
-import android.arch.paging.PagedListAdapter
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R

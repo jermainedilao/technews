@@ -1,9 +1,9 @@
 package jermaine.technews.ui.bookmarks
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R

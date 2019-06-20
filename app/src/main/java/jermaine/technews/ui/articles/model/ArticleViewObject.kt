@@ -1,6 +1,6 @@
 package jermaine.technews.ui.articles.model
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import jermaine.domain.articles.model.Article
 import jermaine.domain.articles.model.Source
 import jermaine.technews.R

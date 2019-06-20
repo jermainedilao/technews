@@ -1,6 +1,6 @@
 package jermaine.data.articles.db.room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import io.reactivex.Single
 import jermaine.data.articles.db.model.ArticleModel
 

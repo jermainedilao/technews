@@ -54,15 +54,15 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation Libs.supportAppCompatV7
-    implementation Libs.supportV4
-    implementation Libs.supportMediaCompat
+    implementation Libs.legacySupport
+    implementation Libs.media
     implementation Libs.constraintLayout
     implementation Libs.recyclerView
     implementation Libs.cardView
-    implementation Libs.customTabs
+    implementation Libs.browser
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation Libs.glide
     kapt Libs.glideCompiler
@@ -81,6 +81,14 @@ dependencies {
 
     // An adaptation of the JSR-310 backport for Android.
     implementation Libs.threeTenAbp
+
+    // Lifecycle ViewModel
+    implementation Libs.viewModel
+    implementation Libs.lifecycleExtensions
+
+    // Dagger-Android
+    implementation Libs.daggerAndroid
+    implementation Libs.daggerAndroidSupport
 }
 
 apply plugin: 'com.google.gms.google-services'

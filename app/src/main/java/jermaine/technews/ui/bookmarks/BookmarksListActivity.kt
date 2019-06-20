@@ -2,11 +2,11 @@ package jermaine.technews.ui.bookmarks
 
 import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.MenuItem
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -55,13 +55,15 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     }
 
     private fun fetchBookmarkedArticles() {
-        viewModel.fetchBookmarkedArticles(1)
+        compositeDisposable.add(
+            viewModel.fetchBookmarkedArticles(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     updateList(it)
                 }, {
                     Log.e(TAG, "onCreate: ", it)
                 })
+        )
     }
 
     /**
@@ -72,18 +74,18 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
         val manager = LinearLayoutManager(this)
 
         val itemClick = adapter.clickEvent
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    startBrowser(it.url)
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                startBrowser(it.url)
+            }
         val bookmark = adapter.bookmarkEvent
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMapCompletable {
-                    removeBookmarkedArticle(it)
-                }
-                .subscribe {
-                    Log.d(TAG, "Done bookmarking/removing bookmark article.")
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .concatMapCompletable {
+                removeBookmarkedArticle(it)
+            }
+            .subscribe {
+                Log.d(TAG, "Done bookmarking/removing bookmark article.")
+            }
 
         compositeDisposable.addAll(itemClick, bookmark)
 
@@ -102,7 +104,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
         val item = pair.second
 
         return viewModel.removeBookmarkedArticle(item)
-                .andThen(adapter.remove(position))
+            .andThen(adapter.remove(position))
     }
 
     override fun onLastItem() {
@@ -137,11 +139,11 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =
-            when (item?.itemId) {
-                android.R.id.home -> {
-                    onBackPressed()
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+        when (item?.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
             }
+            else -> super.onOptionsItemSelected(item)
+        }
 }

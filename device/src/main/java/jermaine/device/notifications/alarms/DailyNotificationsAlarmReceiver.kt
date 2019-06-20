@@ -8,10 +8,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
-import android.support.v4.content.ContextCompat
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import jermaine.device.R
 
 
@@ -30,17 +30,17 @@ class DailyNotificationsAlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, 0)
 
         val notificationBuilder = NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_stat_notify)
-                .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                .setContentTitle(context.getString(R.string.daily_notifications_title))
-                .setContentText(context.getString(R.string.daily_notifications_message))
-                .setStyle(
-                        NotificationCompat.BigTextStyle()
-                                .bigText(context.getString(R.string.daily_notifications_message))
-                )
-                .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
+            .setSmallIcon(R.drawable.ic_stat_notify)
+            .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+            .setContentTitle(context.getString(R.string.daily_notifications_title))
+            .setContentText(context.getString(R.string.daily_notifications_message))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(context.getString(R.string.daily_notifications_message))
+            )
+            .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(DAILY_NOTIFICATION_ID, notificationBuilder.build())
@@ -50,9 +50,9 @@ class DailyNotificationsAlarmReceiver : BroadcastReceiver() {
     private fun createNotificationForOreo(context: Context) {
         val channelId = "${context.applicationContext.packageName}.CHANNEL_DAILY_NOTIFICATIONS"
         val notificationChannel = NotificationChannel(
-                channelId,
-                context.getString(R.string.daily_notifications_text),
-                NotificationManager.IMPORTANCE_HIGH
+            channelId,
+            context.getString(R.string.daily_notifications_text),
+            NotificationManager.IMPORTANCE_HIGH
         )
         notificationChannel.description = context.getString(R.string.daily_notifications_description_text)
 
@@ -65,17 +65,17 @@ class DailyNotificationsAlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, 0)
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_stat_notify)
-                .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                .setContentTitle(context.getString(R.string.daily_notifications_title))
-                .setContentText(context.getString(R.string.daily_notifications_message))
-                .setStyle(
-                        NotificationCompat.BigTextStyle()
-                                .bigText(context.getString(R.string.daily_notifications_message))
-                )
-                .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
+            .setSmallIcon(R.drawable.ic_stat_notify)
+            .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+            .setContentTitle(context.getString(R.string.daily_notifications_title))
+            .setContentText(context.getString(R.string.daily_notifications_message))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(context.getString(R.string.daily_notifications_message))
+            )
+            .setPriority(NotificationManagerCompat.IMPORTANCE_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         notificationManager.notify(DAILY_NOTIFICATION_ID, notificationBuilder.build())
 
