@@ -6,7 +6,10 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.android.AndroidInjection
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +29,14 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     }
 
     @Inject
-    lateinit var viewModel: ArticlesViewModel
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: ArticlesViewModel by lazy {
+        ViewModelProviders.of(
+            this,
+            viewModelFactory
+        )[ArticlesViewModel::class.java]
+    }
 
     /**
      * Page for pagination.
@@ -37,9 +47,10 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_articles_list)
-        getComponent().inject(this)
         setSupportActionBar(toolbar)
 
         compositeDisposable = CompositeDisposable()

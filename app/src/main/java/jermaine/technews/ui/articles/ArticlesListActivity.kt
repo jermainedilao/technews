@@ -10,11 +10,13 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import dagger.android.AndroidInjection
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
@@ -32,18 +34,22 @@ class ArticlesListActivity : BaseActivity() {
     }
 
     @Inject
-    lateinit var viewModel: ArticlesViewModel
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var compositeDisposable: CompositeDisposable
+    private val viewModel: ArticlesViewModel by lazy {
+        ViewModelProviders.of(
+            this,
+            viewModelFactory
+        )[ArticlesViewModel::class.java]
+    }
     private lateinit var adapter: ArticlesListAdapterNew
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
-        getComponent().inject(this)
         setContentView(R.layout.activity_articles_list)
         setSupportActionBar(toolbar)
-
-        compositeDisposable = CompositeDisposable()
 
         initializeList()
         setSwipeRefreshListener()
@@ -66,16 +72,7 @@ class ArticlesListActivity : BaseActivity() {
             }, {
                 Log.e(TAG, "Error on creating daily notifications.", it)
             })
-        compositeDisposable.add(createDailyNotification)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
-        super.onDestroy()
+        viewModel.compositeDisposable.add(createDailyNotification)
     }
 
     /**
@@ -100,7 +97,7 @@ class ArticlesListActivity : BaseActivity() {
                 Log.d(TAG, "Done bookmarking/removing bookmark article.")
             }
 
-        compositeDisposable.addAll(itemClick, bookmark)
+        viewModel.compositeDisposable.addAll(itemClick, bookmark)
 
         recycler_view.layoutManager = manager
         (recycler_view.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -138,7 +135,7 @@ class ArticlesListActivity : BaseActivity() {
                     adapter.setDefaultState(position)
                 }
             }
-        compositeDisposable.add(disposable)
+        viewModel.compositeDisposable.add(disposable)
 
         loadingState.onNext(true)
 

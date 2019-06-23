@@ -2,11 +2,13 @@ package jermaine.technews.ui.articles
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
@@ -26,11 +28,13 @@ class ArticlesViewModel @Inject constructor(
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
     private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,
     private val createDailyNotificationsUseCase: CreateDailyNotificationsUseCase
-) {
+): ViewModel() {
 
     companion object {
         val TAG = "ArticlesViewModel"
     }
+
+    val compositeDisposable = CompositeDisposable()
 
     private val pagedListConfig: PagedList.Config by lazy {
         PagedList.Config.Builder()
@@ -74,4 +78,9 @@ class ArticlesViewModel @Inject constructor(
      * Creates a daily notification.
      **/
     fun createDailyNotifications(): Completable = createDailyNotificationsUseCase.execute()
+
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
+    }
 }

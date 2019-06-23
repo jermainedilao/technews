@@ -89,6 +89,7 @@ dependencies {
     // Dagger-Android
     implementation Libs.daggerAndroid
     implementation Libs.daggerAndroidSupport
+    kapt Libs.daggerAndroidProcessor
 }
 
 apply plugin: 'com.google.gms.google-services'

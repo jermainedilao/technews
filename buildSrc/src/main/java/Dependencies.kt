@@ -9,14 +9,14 @@ object Versions {
     const val browser = "1.0.0"
     const val glide = "4.9.0"
     const val rxAndroid = "2.0.2"
-    const val daggerCompiler = "2.14.1"
+    const val daggerCompiler = "2.23.2"
     const val firebaseCore = "16.0.8"
     const val crashlytics = "2.9.9"
     const val paging = "2.1.0"
     const val liveData = "2.0.0"
     const val threeTenAbp = "1.1.0"
-    const val kotlinGradlePlugin = "1.3.20"
-    const val kotlinStdlibJdk7 = "1.3.20"
+    const val kotlinGradlePlugin = "1.3.31"
+    const val kotlinStdlibJdk7 = "1.3.31"
     const val gson = "2.8.2"
     const val retrofit = "2.3.0"
     const val gsonConverter = "2.3.0"
@@ -25,12 +25,12 @@ object Versions {
     const val roomCompiler = "2.1.0"
     const val roomRxJava = "1.1.1"
     const val rxJava = "2.1.10"
-    const val dagger = "2.14.1"
+    const val dagger = "2.23.2"
     const val viewModel = "2.0.0"
     const val lifeCycleExtensions = "2.0.0"
     const val daggerAndroid = "2.23.1"
     const val daggerAndroidSupport = "2.23.1"
-
+    const val daggerAndroidProcessor = "2.23.2"
 }
 
 object Libs {
@@ -68,4 +68,5 @@ object Libs {
     val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     val daggerAndroid =  "com.google.dagger:dagger-android:${Versions.daggerAndroid}"
     val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.daggerAndroidSupport}"
+    val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.daggerAndroidProcessor}"
 }
