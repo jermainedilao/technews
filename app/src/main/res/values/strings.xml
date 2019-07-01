@@ -3,4 +3,5 @@
     <string name="bookmarks_text">Bookmarks</string>
     <string name="bookmark_text">Bookmark</string>
     <string name="attribution_text">Powered by News API</string>
+    <string name="error_text">Oops! Sorry. Look\'s like we messed up. We\'re looking into it.</string>
 </resources>

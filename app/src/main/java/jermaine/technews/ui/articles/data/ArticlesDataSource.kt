@@ -1,6 +1,7 @@
 package jermaine.technews.ui.articles.data
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import io.reactivex.Observable
@@ -10,7 +11,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
+import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
+import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
 import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
@@ -23,22 +26,22 @@ class ArticlesDataSource(
 ) : PageKeyedDataSource<Int, ArticleViewObject>() {
 
     companion object {
-        const val TAG = "ArticlesDataSource"
+        private const val TAG = "ArticlesDataSource"
+        private val INITIAL_UI_STATE = UIState.Loading
     }
 
     private val compositeDisposable = CompositeDisposable()
-    val refreshState = MutableLiveData<Boolean>()
+    val uiState = MutableLiveData<UIState>(INITIAL_UI_STATE)
     val paginateState = MutableLiveData<Boolean>()
-
 
     /**
      * Fetches initial list of articles.
      *
      * Also, updates bookmark status of the articles inside the list.
      *
-     * This is also responsible to trigger refreshState to show or not.
+     * This is also responsible to update uiState.
      *
-     * @see refreshState
+     * @see uiState
      */
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, ArticleViewObject>) {
         val disposable = fetchArticlesListUseCase.execute(1)
@@ -52,13 +55,14 @@ class ArticlesDataSource(
             .flatMap { updateBookMarkStatusFromList(it) }
             .doOnSubscribe {
                 // Show refreshing in loading initial state
-                refreshState.postValue(true)
+                uiState.postValue(UIState.Loading)
             }
-            .doOnSuccess { refreshState.postValue(false) }
-            .doOnError { refreshState.postValue(false) }
+            .doOnSuccess { uiState.postValue(UIState.HasData) }
+            .doOnError { uiState.postValue(UIState.Error(R.string.error_text)) }
             .subscribe({
                 callback.onResult(it, 1, 2)
             }, {
+                Log.e(TAG, "loadInitial", it)
                 throw it
             })
 
@@ -100,6 +104,7 @@ class ArticlesDataSource(
             .subscribe({
                 callback.onResult(it, params.key + 1)
             }, {
+                Log.e(TAG, "loadAfter", it)
                 throw it
             })
 

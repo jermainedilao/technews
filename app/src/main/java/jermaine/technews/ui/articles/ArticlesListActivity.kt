@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
+import jermaine.technews.databinding.ActivityArticlesListBinding
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapterNew
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.base.BaseActivity
@@ -30,7 +32,7 @@ import javax.inject.Inject
 
 class ArticlesListActivity : BaseActivity() {
     companion object {
-        val TAG = "ArticlesListActivity"
+        private const val TAG = "ArticlesListActivity"
     }
 
     @Inject
@@ -48,9 +50,15 @@ class ArticlesListActivity : BaseActivity() {
         AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_articles_list)
-        setSupportActionBar(toolbar)
 
+        val binding: ActivityArticlesListBinding = DataBindingUtil.setContentView(
+            this,
+            R.layout.activity_articles_list
+        )
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+
+        setSupportActionBar(toolbar)
         initializeList()
         setSwipeRefreshListener()
         setLoadingIndicators()
@@ -166,19 +174,9 @@ class ArticlesListActivity : BaseActivity() {
     }
 
     /**
-     * Responsible for showing the refresh and paginate indicator in UI.
+     * Responsible for showing the paginate indicator in UI.
      **/
     private fun setLoadingIndicators() {
-        // Responsible for showing the refresh indicator.
-        Transformations.switchMap(
-            viewModel.articlesDataSourceFactory.articlesDataSourceLiveData
-        ) {
-            it.refreshState
-        }.observe(this, Observer { refreshing ->
-            swipe_refresh_layout.isRefreshing = refreshing!!
-        })
-
-
         // Responsible for showing the paginate indicator.
         Transformations.switchMap(
             viewModel.articlesDataSourceFactory.articlesDataSourceLiveData

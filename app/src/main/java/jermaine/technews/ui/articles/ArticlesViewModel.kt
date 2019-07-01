@@ -2,6 +2,7 @@ package jermaine.technews.ui.articles
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -15,6 +16,7 @@ import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedA
 import jermaine.domain.notifications.interactors.CreateDailyNotificationsUseCase
 import jermaine.technews.ui.articles.data.ArticlesDataSourceFactory
 import jermaine.technews.ui.articles.model.ArticleViewObject
+import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,7 +30,7 @@ class ArticlesViewModel @Inject constructor(
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
     private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,
     private val createDailyNotificationsUseCase: CreateDailyNotificationsUseCase
-): ViewModel() {
+) : ViewModel() {
 
     companion object {
         val TAG = "ArticlesViewModel"
@@ -47,6 +49,14 @@ class ArticlesViewModel @Inject constructor(
 
     val articlesListLiveData: LiveData<PagedList<ArticleViewObject>> by lazy {
         LivePagedListBuilder(articlesDataSourceFactory, pagedListConfig).build()
+    }
+
+    val uiState: LiveData<UIState> by lazy {
+        Transformations.switchMap(
+            articlesDataSourceFactory.articlesDataSourceLiveData
+        ) {
+            it.uiState
+        }
     }
 
     /**
@@ -81,6 +91,7 @@ class ArticlesViewModel @Inject constructor(
 
     override fun onCleared() {
         compositeDisposable.clear()
+        articlesDataSourceFactory.articlesDataSourceLiveData.value!!.destroy()
         super.onCleared()
     }
 }

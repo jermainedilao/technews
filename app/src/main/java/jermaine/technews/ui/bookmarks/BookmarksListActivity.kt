@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.AndroidInjection
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import jermaine.technews.R
 import jermaine.technews.ui.articles.ArticlesViewModel
 import jermaine.technews.ui.articles.model.ArticleViewObject
@@ -44,7 +43,6 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     private var page: Int = 1
 
     private lateinit var adapter: BookmarksListAdapter
-    private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -52,8 +50,6 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_articles_list)
         setSupportActionBar(toolbar)
-
-        compositeDisposable = CompositeDisposable()
 
         initializeToolbar()
         initializeList()
@@ -66,7 +62,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
     }
 
     private fun fetchBookmarkedArticles() {
-        compositeDisposable.add(
+        viewModel.compositeDisposable.add(
             viewModel.fetchBookmarkedArticles(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -98,7 +94,7 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
                 Log.d(TAG, "Done bookmarking/removing bookmark article.")
             }
 
-        compositeDisposable.addAll(itemClick, bookmark)
+        viewModel.compositeDisposable.addAll(itemClick, bookmark)
 
         recycler_view.layoutManager = manager
         recycler_view.adapter = adapter

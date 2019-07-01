@@ -14,16 +14,23 @@ class ArticlesDataSourceFactory @Inject constructor(
     private val fetchArticlesListUseCase: FetchArticlesListUseCase,
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase
 ): DataSource.Factory<Int, ArticleViewObject>() {
-    val articlesDataSourceLiveData = MutableLiveData<ArticlesDataSource>()
-    private lateinit var articlesDataSource: ArticlesDataSource
-
-    override fun create(): DataSource<Int, ArticleViewObject> {
-        articlesDataSource = ArticlesDataSource(
+    private var articlesDataSource: ArticlesDataSource =
+        ArticlesDataSource(
             appContext,
             fetchArticlesListUseCase,
             fetchBookmarkedArticleUseCase
         )
-        articlesDataSourceLiveData.postValue(articlesDataSource)
+    val articlesDataSourceLiveData = MutableLiveData<ArticlesDataSource>(articlesDataSource)
+
+    override fun create(): DataSource<Int, ArticleViewObject> {
+        if (articlesDataSource.isInvalid) {
+            articlesDataSource = ArticlesDataSource(
+                appContext,
+                fetchArticlesListUseCase,
+                fetchBookmarkedArticleUseCase
+            )
+            articlesDataSourceLiveData.postValue(articlesDataSource)
+        }
         return articlesDataSource
     }
 }
