@@ -8,10 +8,28 @@ Android Studio 3.0 or newer.
 ### API Keys
 You need to obtain an API key from [News API](https://newsapi.org/).
 
-After obtaining the API key, in your Android Studio, inside `data/src/main`. Create an `Android resource file` named `strings.xml` and place the API key there with string name `news_api_key` like this:
+#### Placing API Key inside the project.
+
+1. After obtaining the API Key, in your Android Studio. Create a `build.properties` file at the root level of your project and place the API key inside like this:
 ```
-<string name="news_api_key">insert_your_api_key_here></string>
+NEWS_API_KEY="inser_your_api_key_here"
 ```
+
+2. Open `build.gradle` file inside `data` module and paste this block of code just above the `android {` block.
+```
+def buildPropertiesFile = rootProject.file("build.properties")
+def buildProperties = new Properties()
+
+buildProperties.load(new FileInputStream(buildPropertiesFile))
+```
+
+Keep `build.gradle` open for the next step.
+
+3. Lastly, inside the `android {` block, you can find `defaultConfig {` block. Paste this line inside `defaultConfig {` block.
+```
+buildConfigField "String", "NEWS_API_KEY", buildProperties['NEWS_API_KEY']
+```
+
 And you're all set!
 
 ## 
@@ -26,6 +44,9 @@ And you're all set!
 * [Paging](https://developer.android.com/topic/libraries/architecture/paging) - For pagination.
 * [Glide](https://bumptech.github.io/glide/) - Image loading library.
 * [Firebase Crashlytics](https://firebase.google.com/docs/crashlytics/) - For crash reporting.
+* [Mockito](https://github.com/mockito/mockito) - For mocking objects in unit testing.
+* [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) - Helper class for using mockito with kotlin.
+* [jUnit](https://junit.org/junit4/) - For unit testing.
 
 ### Todo
 * Build unit tests
