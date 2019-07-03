@@ -2,6 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+def buildPropertiesFile = rootProject.file("build.properties")
+def buildProperties = new Properties()
+
+buildProperties.load(new FileInputStream(buildPropertiesFile))
+
 android {
     compileSdkVersion 28
 
@@ -11,8 +16,9 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "NEWS_API_KEY", buildProperties['NEWS_API_KEY']
 
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -29,7 +35,9 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation Libs.supportAppCompatV7
-    testImplementation 'junit:junit:4.12'
+    testImplementation Libs.mockitoCore
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.jUnit
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 

@@ -1,10 +1,10 @@
 package jermaine.technews.ui.articles.util
 
-import android.content.Context
 import jermaine.domain.articles.model.Article
 import jermaine.domain.articles.util.ArticleUtil
 import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
+import jermaine.technews.util.ResourceManager
 import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
@@ -13,7 +13,10 @@ import java.util.concurrent.TimeUnit
 
 
 object ViewObjectParser {
-    fun articleToViewObjectRepresentation(article: Article, context: Context): ArticleViewObject =
+    /**
+     * Converts Article domain representation to Article view object representation.
+     */
+    fun articleToViewObjectRepresentation(article: Article, resourceManager: ResourceManager): ArticleViewObject =
         with(article) {
             ArticleViewObject(
                 id = ArticleUtil.getIdValue(article),
@@ -24,7 +27,7 @@ object ViewObjectParser {
                 url = url,
                 urlToImage = urlToImage,
                 publishedAt = publishedAt,
-                publishedAtDisplay = getPublishedAtDisplay(publishedAt, context),
+                publishedAtDisplay = getPublishedAtDisplay(publishedAt, resourceManager),
                 bookmarked = bookmarked,
                 bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_blue_24dp else R.drawable.ic_bookmark_border_gray_24dp,
                 bookmarkButtonTextResId = R.string.bookmark_text,
@@ -37,8 +40,8 @@ object ViewObjectParser {
      * Returns elapsed time since publishedAt.
      *
      * @param publishedAt Date string of date published. Must be in this UTC format (2011-12-03T10:15:30Z).
-     **/
-    private fun getPublishedAtDisplay(publishedAt: String?, context: Context): String {
+     */
+    private fun getPublishedAtDisplay(publishedAt: String?, resourceManager: ResourceManager): String {
         publishedAt?.let {
             val publishedAtInstant = Instant.parse(publishedAt)
             val zonedPublishedAt = publishedAtInstant.atZone(ZoneId.systemDefault()) // Converts the UTC datetime string to local time.
@@ -52,10 +55,10 @@ object ViewObjectParser {
 
             // https://developer.android.com/guide/topics/resources/string-resource#Plurals
             return when {
-                days > 0 -> context.resources.getQuantityString(R.plurals.elapsedTimeDays, days.toInt(), days.toInt())
-                hours > 0 -> context.resources.getQuantityString(R.plurals.elapsedTimeHours, hours.toInt(), hours.toInt())
-                minutes > 0 -> context.resources.getQuantityString(R.plurals.elapsedTimeMinutes, minutes.toInt())
-                else -> context.resources.getQuantityString(R.plurals.elapsedTimeSeconds, elapsedTimeInSeconds.toInt())
+                days > 0 -> resourceManager.getQuantityString(R.plurals.elapsedTimeDays, days.toInt(), days.toInt())
+                hours > 0 -> resourceManager.getQuantityString(R.plurals.elapsedTimeHours, hours.toInt(), hours.toInt())
+                minutes > 0 -> resourceManager.getQuantityString(R.plurals.elapsedTimeMinutes, minutes.toInt())
+                else -> resourceManager.getQuantityString(R.plurals.elapsedTimeSeconds, elapsedTimeInSeconds.toInt())
             }
         }
         return ""

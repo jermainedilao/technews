@@ -8,11 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import dagger.android.AndroidInjection
@@ -21,29 +18,21 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jermaine.technews.R
+import jermaine.technews.base.BaseActivity
 import jermaine.technews.databinding.ActivityArticlesListBinding
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapterNew
 import jermaine.technews.ui.articles.model.ArticleViewObject
-import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
-import kotlinx.android.synthetic.main.activity_articles_list.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class ArticlesListActivity : BaseActivity() {
+class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesViewModel>() {
     companion object {
         private const val TAG = "ArticlesListActivity"
     }
 
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    override val layoutId: Int
+        get() = R.layout.activity_articles_list
 
-    private val viewModel: ArticlesViewModel by lazy {
-        ViewModelProviders.of(
-            this,
-            viewModelFactory
-        )[ArticlesViewModel::class.java]
-    }
     private lateinit var adapter: ArticlesListAdapterNew
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +40,9 @@ class ArticlesListActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityArticlesListBinding = DataBindingUtil.setContentView(
-            this,
-            R.layout.activity_articles_list
-        )
-        binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         initializeList()
         setSwipeRefreshListener()
         setLoadingIndicators()
@@ -107,9 +91,9 @@ class ArticlesListActivity : BaseActivity() {
 
         viewModel.compositeDisposable.addAll(itemClick, bookmark)
 
-        recycler_view.layoutManager = manager
-        (recycler_view.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        recycler_view.adapter = adapter
+        binding.recyclerView.layoutManager = manager
+        (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        binding.recyclerView.adapter = adapter
     }
 
     /**
@@ -168,7 +152,7 @@ class ArticlesListActivity : BaseActivity() {
      * Sets swipe refresh listener to swipe refresh layout.
      **/
     private fun setSwipeRefreshListener() {
-        swipe_refresh_layout.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.articlesDataSourceFactory.articlesDataSourceLiveData.value!!.invalidate()
         }
     }

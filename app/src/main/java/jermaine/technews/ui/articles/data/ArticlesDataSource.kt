@@ -1,6 +1,5 @@
 package jermaine.technews.ui.articles.data
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
@@ -15,12 +14,13 @@ import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
+import jermaine.technews.util.ResourceManager
 import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
 
 
 class ArticlesDataSource(
-    private val appContext: Context,
+    private val resourceManager: ResourceManager,
     private val fetchArticlesListUseCase: FetchArticlesListUseCase,
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase
 ) : PageKeyedDataSource<Int, ArticleViewObject>() {
@@ -49,7 +49,7 @@ class ArticlesDataSource(
                 Observable.fromIterable(it)  // Convert list to iterable.
             }
             .map {
-                ViewObjectParser.articleToViewObjectRepresentation(it, appContext)
+                ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
             }
             .toList()
             .flatMap { updateBookMarkStatusFromList(it) }
@@ -86,7 +86,7 @@ class ArticlesDataSource(
                 Observable.fromIterable(it)  // Convert list to iterable.
             }
             .map {
-                ViewObjectParser.articleToViewObjectRepresentation(it, appContext)
+                ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
             }
             .toList()
             .flatMap {
@@ -157,7 +157,7 @@ class ArticlesDataSource(
             .map {
                 ViewObjectParser.articleToViewObjectRepresentation(
                     it,
-                    appContext
+                    resourceManager
                 )
             }
             .toList()

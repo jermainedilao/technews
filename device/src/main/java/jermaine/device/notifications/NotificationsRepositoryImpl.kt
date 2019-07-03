@@ -7,13 +7,16 @@ import android.content.Intent
 import android.util.Log
 import io.reactivex.Completable
 import jermaine.device.notifications.alarms.DailyNotificationsAlarmReceiver
+import jermaine.domain.di.scopes.ApplicationContext
 import jermaine.domain.notifications.NotificationsRepository
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationsRepositoryImpl @Inject constructor(private val context: Context) : NotificationsRepository {
+class NotificationsRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+) : NotificationsRepository {
     companion object {
         const val TAG = "NotificationsRepository"
     }

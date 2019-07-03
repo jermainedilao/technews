@@ -11,7 +11,9 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation Libs.mockitoCore
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.jUnit
 
     api Libs.kotlinStdlibJdk7
     api Libs.rxJava

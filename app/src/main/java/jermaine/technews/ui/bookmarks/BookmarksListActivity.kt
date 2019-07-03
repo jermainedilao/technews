@@ -6,36 +6,24 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.AndroidInjection
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import jermaine.technews.R
-import jermaine.technews.ui.articles.ArticlesViewModel
+import jermaine.technews.base.BaseActivity
+import jermaine.technews.databinding.ActivityBookmarksListBinding
 import jermaine.technews.ui.articles.model.ArticleViewObject
-import jermaine.technews.ui.base.BaseActivity
 import jermaine.technews.util.callbacks.OnLastItemCallback
-import kotlinx.android.synthetic.main.activity_articles_list.*
-import javax.inject.Inject
 
 
-class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
-
+class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, BookmarksViewModel>(), OnLastItemCallback {
     companion object {
-        val TAG = "BookmarksListActivity"
+        private const val TAG = "BookmarksListActivity"
     }
 
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: ArticlesViewModel by lazy {
-        ViewModelProviders.of(
-            this,
-            viewModelFactory
-        )[ArticlesViewModel::class.java]
-    }
+    override val layoutId: Int
+        get() = R.layout.activity_bookmarks_list
 
     /**
      * Page for pagination.
@@ -48,9 +36,10 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
         AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_articles_list)
-        setSupportActionBar(toolbar)
 
+        binding.viewModel = viewModel
+
+        setSupportActionBar(binding.toolbar)
         initializeToolbar()
         initializeList()
         fetchBookmarkedArticles()
@@ -96,8 +85,8 @@ class BookmarksListActivity : BaseActivity(), OnLastItemCallback {
 
         viewModel.compositeDisposable.addAll(itemClick, bookmark)
 
-        recycler_view.layoutManager = manager
-        recycler_view.adapter = adapter
+        binding.recyclerView.layoutManager = manager
+        binding.recyclerView.adapter = adapter
     }
 
     /**
