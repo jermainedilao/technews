@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import jermaine.technews.R
@@ -16,7 +16,7 @@ import jermaine.technews.databinding.ActivityBookmarksListBinding
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
-
+@AndroidEntryPoint
 class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, BookmarksViewModel>(), OnLastItemCallback {
     companion object {
         private const val TAG = "BookmarksListActivity"
@@ -33,8 +33,6 @@ class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, Bookmar
     private lateinit var adapter: BookmarksListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-
         super.onCreate(savedInstanceState)
 
         binding.viewModel = viewModel

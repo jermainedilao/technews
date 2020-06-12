@@ -5,10 +5,12 @@ import android.content.Context
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import jermaine.domain.di.scopes.ApplicationContext
 import javax.inject.Singleton
 
-
+@InstallIn(ApplicationComponent::class)
 @Module
 class AppModule {
 

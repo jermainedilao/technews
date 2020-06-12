@@ -1,3 +1,9 @@
+object AppConfig {
+    const val minSdkVersion = 26
+    const val targetSdkVersion = 29
+    const val compileSdkVersion = 29
+}
+
 object Versions {
     const val supportLib = "1.0.2"
     const val legacySupport = "1.0.0"
@@ -34,6 +40,8 @@ object Versions {
     const val mockitoCore = "2.28.2"
     const val mockitoKotlin = "1.6.0"
     const val jUnit = "4.12"
+    const val hilt = "2.28-alpha"
+    const val hiltArchComponents = "1.0.0-alpha01"
 }
 
 object Libs {
@@ -76,4 +84,13 @@ object Libs {
     const val mockitoCore = "org.mockito:mockito-core:${Versions.mockitoCore}"
     const val mockitoKotlin = "com.nhaarman:mockito-kotlin:${Versions.mockitoKotlin}"
     const val jUnit = "junit:junit:${Versions.jUnit}"
+
+    // Hilt
+    const val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
+    const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
+    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+
+    // Hilt Android Architecture Components
+    const val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltArchComponents}"
+    const val hiltArchComponentsCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltArchComponents}"
 }

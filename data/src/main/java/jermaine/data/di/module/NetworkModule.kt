@@ -3,6 +3,8 @@ package jermaine.data.di.module
 import android.app.Application
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import jermaine.data.articles.ApiService
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -11,7 +13,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-
+@InstallIn(ApplicationComponent::class)
 @Module
 class NetworkModule {
     @Singleton
@@ -24,17 +26,17 @@ class NetworkModule {
     @Singleton
     @Provides
     fun providesOkHttpClient(cache: Cache): OkHttpClient = OkHttpClient.Builder()
-            .cache(cache)
-            .build()
+        .cache(cache)
+        .build()
 
     @Singleton
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-            .baseUrl("https://technews-api.appspot.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(okHttpClient)
-            .build()
+        .baseUrl("https://technews-api.appspot.com")
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .client(okHttpClient)
+        .build()
 
     @Singleton
     @Provides

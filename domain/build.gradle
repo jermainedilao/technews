@@ -20,4 +20,8 @@ dependencies {
 
     api Libs.dagger
     kapt Libs.daggerCompiler
+
+    // Hilt
+    api Libs.hilt
+    kapt Libs.hiltCompiler
 }

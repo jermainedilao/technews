@@ -2,12 +2,14 @@ package jermaine.technews.di.module
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import jermaine.data.articles.ArticlesRepositoryImpl
 import jermaine.device.notifications.NotificationsRepositoryImpl
 import jermaine.domain.articles.ArticlesRepository
 import jermaine.domain.notifications.NotificationsRepository
 
-
+@InstallIn(ApplicationComponent::class)
 @Module
 class RepositoryModule {
     @Provides

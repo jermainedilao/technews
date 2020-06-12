@@ -23,7 +23,7 @@ class ArticlesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     companion object {
-        val TAG = "ArticlesViewModel"
+        const val TAG = "ArticlesViewModel"
     }
 
     private val pagedListConfig: PagedList.Config by lazy {

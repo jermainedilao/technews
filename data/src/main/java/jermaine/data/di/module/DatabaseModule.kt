@@ -4,10 +4,13 @@ import android.app.Application
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import jermaine.data.articles.db.room.ArticleRoomDao
 import jermaine.data.db.AppDatabase
 import javax.inject.Singleton
 
+@InstallIn(ApplicationComponent::class)
 @Module
 class DatabaseModule {
     @Provides

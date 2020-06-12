@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +25,7 @@ import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesViewModel>() {
     companion object {
         private const val TAG = "ArticlesListActivity"
@@ -36,8 +37,6 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
     private lateinit var adapter: ArticlesListAdapterNew
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-
         super.onCreate(savedInstanceState)
 
         binding.viewModel = viewModel

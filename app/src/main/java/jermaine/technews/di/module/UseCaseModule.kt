@@ -2,6 +2,8 @@ package jermaine.technews.di.module
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import jermaine.domain.articles.ArticlesRepository
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
@@ -10,7 +12,7 @@ import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedA
 import jermaine.domain.notifications.NotificationsRepository
 import jermaine.domain.notifications.interactors.CreateDailyNotificationsUseCase
 
-
+@InstallIn(ApplicationComponent::class)
 @Module
 class UseCaseModule {
     @Provides
