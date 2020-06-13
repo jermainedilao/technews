@@ -189,8 +189,8 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.view_bookmarks -> {
                 val intent = Intent(this, BookmarksListActivity::class.java)
                 startActivity(intent)
