@@ -55,10 +55,37 @@ object ViewObjectParser {
 
             // https://developer.android.com/guide/topics/resources/string-resource#Plurals
             return when {
-                days > 0 -> resourceManager.getQuantityString(R.plurals.elapsedTimeDays, days.toInt(), days.toInt())
-                hours > 0 -> resourceManager.getQuantityString(R.plurals.elapsedTimeHours, hours.toInt(), hours.toInt())
-                minutes > 0 -> resourceManager.getQuantityString(R.plurals.elapsedTimeMinutes, minutes.toInt())
-                else -> resourceManager.getQuantityString(R.plurals.elapsedTimeSeconds, elapsedTimeInSeconds.toInt())
+                days > 0 -> {
+                    resourceManager
+                        .getQuantityString(
+                            R.plurals.elapsedTimeDays,
+                            days.toInt(),
+                            days.toInt()
+                        )
+                }
+                hours > 0 -> {
+                    resourceManager
+                        .getQuantityString(
+                            R.plurals.elapsedTimeHours,
+                            hours.toInt(),
+                            hours.toInt()
+                        )
+                }
+                minutes > 0 -> {
+                    resourceManager
+                        .getQuantityString(
+                            R.plurals.elapsedTimeMinutes,
+                            minutes.toInt(),
+                            minutes.toInt()
+                        )
+                }
+                else -> {
+                    resourceManager
+                        .getQuantityString(
+                            R.plurals.elapsedTimeSeconds,
+                            elapsedTimeInSeconds.toInt()
+                        )
+                }
             }
         }
         return ""
