@@ -1,4 +1,3 @@
-
 object Versions {
     const val supportLib = "1.0.2"
     const val legacySupport = "1.0.0"
@@ -11,7 +10,8 @@ object Versions {
     const val rxAndroid = "2.0.2"
     const val daggerCompiler = "2.23.2"
     const val firebaseCore = "16.0.8"
-    const val crashlytics = "2.9.9"
+    const val crashlytics = "17.2.2"
+    const val crashlyticsPlugin = "2.3.0"
     const val paging = "2.1.0"
     const val liveData = "2.2.0-alpha01"
     const val threeTenAbp = "1.1.0"
@@ -51,6 +51,7 @@ object Libs {
     const val roomCompiler = "androidx.room:room-compiler:${Versions.roomCompiler}"
     const val viewModel = "androidx.lifecycle:lifecycle-viewmodel:${Versions.viewModel}"
     const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifeCycleExtensions}"
+    const val crashlyticsPlugin = "com.google.firebase:firebase-crashlytics-gradle:${Versions.crashlyticsPlugin}"
 
     // 3rd party
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
@@ -58,7 +59,7 @@ object Libs {
     const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerCompiler}"
     const val firebaseCore = "com.google.firebase:firebase-core:${Versions.firebaseCore}"
-    const val crashlytics = "com.crashlytics.sdk.android:crashlytics:${Versions.crashlytics}"
+    const val crashlytics = "com.google.firebase:firebase-crashlytics:${Versions.crashlytics}"
     const val threeTenAbp = "com.jakewharton.threetenabp:threetenabp:${Versions.threeTenAbp}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinGradlePlugin}"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
@@ -69,7 +70,7 @@ object Libs {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val kotlinStdlibJdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlinStdlibJdk7}"
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
-    const val daggerAndroid =  "com.google.dagger:dagger-android:${Versions.daggerAndroid}"
+    const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.daggerAndroid}"
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.daggerAndroidSupport}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.daggerAndroidProcessor}"
     const val mockitoCore = "org.mockito:mockito-core:${Versions.mockitoCore}"

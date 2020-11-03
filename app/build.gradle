@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 def keyStorePropertiesFile = rootProject.file("keystore.properties")
 def keyStoreProperties = new Properties()
@@ -30,8 +30,8 @@ android {
         applicationId "jermaine.technews"
         minSdkVersion 26
         targetSdkVersion 29
-        versionCode 8
-        versionName "1.4.2"
+        versionCode 9
+        versionName "1.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
