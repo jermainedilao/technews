@@ -37,7 +37,7 @@ And you're all set!
 * [Clean Architecture](http://five.agency/android-architecture-part-1-every-new-beginning-is-hard/) - Architechture pattern that separates business logic with other components of the app. (Reading this beautiful article in the link provided would help a lot!)
 * [Kotlin](https://kotlinlang.org/) - App is purely written in Kotlin.
 * [Retrofit 2](http://square.github.io/retrofit/) - For handling network requests.
-* [Dagger 2](https://google.github.io/dagger/) - Dependency injection framework.
+* [Hilt - Dagger](https://dagger.dev/hilt/) - Dependency injection framework.
 * [Gson](https://github.com/google/gson) - For serializing/deserializing JSON objects.
 * [RxJava 2](https://github.com/ReactiveX/RxJava)
 * [Room](https://developer.android.com/topic/libraries/architecture/room.html) - For persisting data.
