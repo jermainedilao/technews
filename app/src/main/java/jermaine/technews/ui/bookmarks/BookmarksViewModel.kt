@@ -1,5 +1,6 @@
 package jermaine.technews.ui.bookmarks
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Completable
@@ -13,10 +14,8 @@ import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
 import jermaine.technews.util.ResourceManager
-import javax.inject.Inject
 
-
-class BookmarksViewModel @Inject constructor(
+class BookmarksViewModel @ViewModelInject constructor(
     private val resourceManager: ResourceManager,
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
     private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase
@@ -31,7 +30,8 @@ class BookmarksViewModel @Inject constructor(
      * Returns list of bookmarked articles.
      **/
     fun fetchBookmarkedArticles(page: Int): Single<List<ArticleViewObject>> =
-        fetchBookmarkedArticleUseCase.execute(page)
+        fetchBookmarkedArticleUseCase
+            .execute(page)
             .doOnSubscribe {
                 _uiState.postValue(UIState.Loading)
             }

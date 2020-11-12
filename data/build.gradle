@@ -8,11 +8,11 @@ def buildProperties = new Properties()
 buildProperties.load(new FileInputStream(buildPropertiesFile))
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion AppConfig.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 29
+        minSdkVersion AppConfig.minSdkVersion
+        targetSdkVersion AppConfig.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -55,6 +55,9 @@ dependencies {
 
     // Dagger annotation processor
     kapt Libs.daggerCompiler
+
+    // Hilt annotation processor
+    kapt Libs.hiltCompiler
 }
 repositories {
     mavenCentral()

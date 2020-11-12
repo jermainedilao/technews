@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'com.google.firebase.crashlytics'
 
+apply plugin: 'dagger.hilt.android.plugin'
+
 def keyStorePropertiesFile = rootProject.file("keystore.properties")
 def keyStoreProperties = new Properties()
 
@@ -25,11 +27,11 @@ android {
             storePassword keyStoreProperties['KEYSTORE_PASSWORD']
         }
     }
-    compileSdkVersion 29
+    compileSdkVersion AppConfig.compileSdkVersion
     defaultConfig {
         applicationId "jermaine.technews"
-        minSdkVersion 26
-        targetSdkVersion 29
+        minSdkVersion AppConfig.minSdkVersion
+        targetSdkVersion AppConfig.targetSdkVersion
         versionCode 9
         versionName "1.4.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -89,10 +91,13 @@ dependencies {
     implementation Libs.viewModel
     implementation Libs.lifecycleExtensions
 
-    // Dagger-Android
-    implementation Libs.daggerAndroid
-    implementation Libs.daggerAndroidSupport
-    kapt Libs.daggerAndroidProcessor
+    // Hilt annotation processor
+    implementation Libs.hilt
+    kapt Libs.hiltCompiler
+
+    // Hilt Android Architecture Components
+    implementation Libs.hiltViewModel
+    kapt Libs.hiltArchComponentsCompiler
 }
 
 apply plugin: 'com.google.gms.google-services'

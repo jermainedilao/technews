@@ -1,8 +1,9 @@
 package jermaine.technews.ui.bookmarks
 
 import dagger.Module
-import jermaine.technews.base.BaseActivityModule
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
-
+@InstallIn(ActivityComponent::class)
 @Module
-class BookmarksActivityModule : BaseActivityModule<BookmarksListActivity>()
+abstract class BookmarksActivityModule

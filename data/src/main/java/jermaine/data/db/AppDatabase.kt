@@ -10,7 +10,7 @@ import jermaine.data.articles.db.room.ArticleRoomDao
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        val DATABASE_NAME = "app_database"
+        const val DATABASE_NAME = "app_database"
     }
 
     abstract fun articleDao(): ArticleRoomDao

@@ -1,5 +1,6 @@
 package jermaine.technews.ui.articles
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
@@ -12,10 +13,8 @@ import jermaine.technews.base.BaseViewModel
 import jermaine.technews.ui.articles.data.ArticlesDataSourceFactory
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
-import javax.inject.Inject
 
-
-class ArticlesViewModel @Inject constructor(
+class ArticlesViewModel @ViewModelInject constructor(
     private val bookmarkArticleUseCase: BookmarkArticleUseCase,
     val articlesDataSourceFactory: ArticlesDataSourceFactory,
     private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,
@@ -23,7 +22,7 @@ class ArticlesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     companion object {
-        val TAG = "ArticlesViewModel"
+        const val TAG = "ArticlesViewModel"
     }
 
     private val pagedListConfig: PagedList.Config by lazy {

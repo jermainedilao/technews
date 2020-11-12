@@ -1,3 +1,9 @@
+object AppConfig {
+    const val minSdkVersion = 26
+    const val targetSdkVersion = 29
+    const val compileSdkVersion = 29
+}
+
 object Versions {
     const val supportLib = "1.0.2"
     const val legacySupport = "1.0.0"
@@ -28,12 +34,11 @@ object Versions {
     const val dagger = "2.23.2"
     const val viewModel = "2.2.0-alpha01"
     const val lifeCycleExtensions = "2.2.0-alpha01"
-    const val daggerAndroid = "2.23.1"
-    const val daggerAndroidSupport = "2.23.1"
-    const val daggerAndroidProcessor = "2.23.2"
     const val mockitoCore = "2.28.2"
     const val mockitoKotlin = "1.6.0"
     const val jUnit = "4.12"
+    const val hilt = "2.28-alpha"
+    const val hiltArchComponents = "1.0.0-alpha01"
 }
 
 object Libs {
@@ -70,10 +75,16 @@ object Libs {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val kotlinStdlibJdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlinStdlibJdk7}"
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
-    const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.daggerAndroid}"
-    const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.daggerAndroidSupport}"
-    const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.daggerAndroidProcessor}"
     const val mockitoCore = "org.mockito:mockito-core:${Versions.mockitoCore}"
     const val mockitoKotlin = "com.nhaarman:mockito-kotlin:${Versions.mockitoKotlin}"
     const val jUnit = "junit:junit:${Versions.jUnit}"
+
+    // Hilt
+    const val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
+    const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
+    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+
+    // Hilt Android Architecture Components
+    const val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltArchComponents}"
+    const val hiltArchComponentsCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltArchComponents}"
 }
