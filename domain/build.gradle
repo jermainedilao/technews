@@ -15,7 +15,7 @@ dependencies {
     testImplementation Libs.mockitoKotlin
     testImplementation Libs.jUnit
 
-    api Libs.kotlinStdlibJdk7
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
     api Libs.rxJava
 
     api Libs.dagger

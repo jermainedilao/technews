@@ -3,6 +3,7 @@ package jermaine.technews.ui.articles.data
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleSource
@@ -63,7 +64,7 @@ class ArticlesDataSource(
                 callback.onResult(it, 1, 2)
             }, {
                 Log.e(TAG, "loadInitial", it)
-                throw it
+                FirebaseCrashlytics.getInstance().recordException(it)
             })
 
         compositeDisposable.add(disposable)
@@ -93,7 +94,10 @@ class ArticlesDataSource(
                 updateBookMarkStatusFromList(it)
             }
             .map {
-                it.apply { addAttribution(it) }
+                if (it.isNotEmpty()) {
+                    addAttribution(it)
+                }
+                it
             }
             .doOnSubscribe {
                 // Show refreshing in loading initial state
@@ -102,10 +106,14 @@ class ArticlesDataSource(
             .doOnSuccess { paginateState.postValue(false) }
             .doOnError { paginateState.postValue(false) }
             .subscribe({
-                callback.onResult(it, params.key + 1)
+                if (it.isNullOrEmpty()) {
+                    callback.onResult(emptyList(), null)
+                } else {
+                    callback.onResult(it, params.key + 1)
+                }
             }, {
                 Log.e(TAG, "loadAfter", it)
-                throw it
+                FirebaseCrashlytics.getInstance().recordException(it)
             })
 
         compositeDisposable.add(disposable)
@@ -118,9 +126,9 @@ class ArticlesDataSource(
      */
     private fun updateBookMarkStatusFromList(list: List<ArticleViewObject>): Single<MutableList<ArticleViewObject>> {
         val zipper = BiFunction<
-                List<ArticleViewObject>,
-                List<ArticleViewObject>,
-                Pair<List<ArticleViewObject>, List<ArticleViewObject>>> { t1, t2 -> Pair(t1, t2) }
+            List<ArticleViewObject>,
+            List<ArticleViewObject>,
+            Pair<List<ArticleViewObject>, List<ArticleViewObject>>> { t1, t2 -> Pair(t1, t2) }
         return Single.just(list)
             .zipWith(fetchBookmarkedArticles(), zipper)
             .flatMapObservable {

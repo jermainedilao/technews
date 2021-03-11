@@ -1,7 +1,7 @@
 object AppConfig {
     const val minSdkVersion = 26
-    const val targetSdkVersion = 29
-    const val compileSdkVersion = 29
+    const val targetSdkVersion = 30
+    const val compileSdkVersion = 30
 }
 
 object Versions {
@@ -56,7 +56,7 @@ object Libs {
     const val roomCompiler = "androidx.room:room-compiler:${Versions.roomCompiler}"
     const val viewModel = "androidx.lifecycle:lifecycle-viewmodel:${Versions.viewModel}"
     const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifeCycleExtensions}"
-    const val crashlyticsPlugin = "com.google.firebase:firebase-crashlytics-gradle:${Versions.crashlyticsPlugin}"
+    const val crashlyticsPlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
 
     // 3rd party
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
@@ -66,7 +66,6 @@ object Libs {
     const val firebaseCore = "com.google.firebase:firebase-core:${Versions.firebaseCore}"
     const val crashlytics = "com.google.firebase:firebase-crashlytics:${Versions.crashlytics}"
     const val threeTenAbp = "com.jakewharton.threetenabp:threetenabp:${Versions.threeTenAbp}"
-    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinGradlePlugin}"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val gsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.gsonConverter}"

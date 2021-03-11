@@ -7,27 +7,27 @@ import jermaine.technews.R
 
 
 data class ArticleViewObject(
-        var id: String = "",
-        var source: Source = Source(),
-        var author: String = "",
-        var title: String = "",
-        var description: String = "",
-        var url: String = "",
-        var urlToImage: String = "",
-        var publishedAt: String = "",
-        var publishedAtDisplay: String = "",
-        var bookmarked: Boolean = false,
-        var bookmarkDrawableResId: Int = 0,
-        var bookmarkButtonTextResId: Int = R.string.bookmark_text,
-        var bookmarkButtonTextColorResId: Int = R.color.light_gray,
-        var containerAlpha: Float = DEFAULT_STATE,
-        var viewType: Int
+    var id: String = "",
+    var source: Source = Source(),
+    var author: String? = "",
+    var title: String = "",
+    var description: String = "",
+    var url: String = "",
+    var urlToImage: String? = "",
+    var publishedAt: String = "",
+    var publishedAtDisplay: String = "",
+    var bookmarked: Boolean = false,
+    var bookmarkDrawableResId: Int = 0,
+    var bookmarkButtonTextResId: Int = R.string.bookmark_text,
+    var bookmarkButtonTextColorResId: Int = R.color.light_gray,
+    var containerAlpha: Float = DEFAULT_STATE,
+    var viewType: Int
 ) {
     companion object {
         const val DEFAULT_STATE = 1.0F
         const val LOADING_STATE = 0.6F
 
-        val diffCallback = object: DiffUtil.ItemCallback<ArticleViewObject>() {
+        val diffCallback = object : DiffUtil.ItemCallback<ArticleViewObject>() {
             override fun areItemsTheSame(p0: ArticleViewObject, p1: ArticleViewObject): Boolean {
                 return p0.id == p1.id && p0.bookmarked == p1.bookmarked
             }
@@ -48,14 +48,14 @@ data class ArticleViewObject(
     }
 
     fun toDomainRepresentation(): Article = Article(
-            id = id,
-            source = source,
-            author = author,
-            title = title,
-            description = description,
-            url = url,
-            urlToImage = urlToImage,
-            publishedAt = publishedAt,
-            bookmarked = bookmarked
+        id = id,
+        source = source,
+        author = author.orEmpty(),
+        title = title,
+        description = description,
+        url = url,
+        urlToImage = urlToImage.orEmpty(),
+        publishedAt = publishedAt,
+        bookmarked = bookmarked
     )
 }
