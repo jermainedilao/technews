@@ -17,7 +17,8 @@ import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.util.callbacks.OnLastItemCallback
 
 @AndroidEntryPoint
-class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, BookmarksViewModel>(), OnLastItemCallback {
+class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, BookmarksViewModel>(),
+    OnLastItemCallback {
     companion object {
         private const val TAG = "BookmarksListActivity"
     }
@@ -45,7 +46,7 @@ class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, Bookmar
 
     private fun initializeToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.bookmarks_text)
+        supportActionBar?.setTitle(R.string.bookmarks)
     }
 
     private fun fetchBookmarkedArticles() {
@@ -72,6 +73,14 @@ class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, Bookmar
             .subscribe {
                 startBrowser(it.url)
             }
+
+        val itemSourceClick = adapter
+            .sourceClickEvent
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                startBrowser(it.url)
+            }
+
         val bookmark = adapter.bookmarkEvent
             .observeOn(AndroidSchedulers.mainThread())
             .concatMapCompletable {
@@ -81,7 +90,7 @@ class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, Bookmar
                 Log.d(TAG, "Done bookmarking/removing bookmark article.")
             }
 
-        viewModel.compositeDisposable.addAll(itemClick, bookmark)
+        viewModel.compositeDisposable.addAll(itemClick, bookmark, itemSourceClick)
 
         binding.recyclerView.layoutManager = manager
         binding.recyclerView.adapter = adapter

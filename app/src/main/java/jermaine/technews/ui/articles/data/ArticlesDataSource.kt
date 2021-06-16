@@ -15,6 +15,7 @@ import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
+import jermaine.technews.util.NEWS_API_URL
 import jermaine.technews.util.ResourceManager
 import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
@@ -176,7 +177,7 @@ class ArticlesDataSource(
      */
     private fun addAttribution(list: MutableList<ArticleViewObject>) {
         val item = ArticleViewObject(viewType = VIEW_TYPE_ATTRIBUTION)
-        item.url = "https://newsapi.org"
+        item.url = NEWS_API_URL
         list.add(0, item)
     }
 

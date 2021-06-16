@@ -18,11 +18,17 @@ import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
 import jermaine.technews.util.VIEW_TYPE_LOADER
 
 
-class ArticlesListAdapterNew : PagedListAdapter<ArticleViewObject, RecyclerView.ViewHolder>(ArticleViewObject.diffCallback) {
+class ArticlesListAdapterNew :
+    PagedListAdapter<ArticleViewObject, RecyclerView.ViewHolder>(ArticleViewObject.diffCallback) {
     /**
      * Emits the item being clicked from the list view.
      **/
     val clickEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
+
+    /**
+     * Emits the item being clicked from the list view.
+     **/
+    val sourceClickEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
 
     /**
      * Emits pair of position and ArticleViewObject of the item being bookmarked.
@@ -58,14 +64,17 @@ class ArticlesListAdapterNew : PagedListAdapter<ArticleViewObject, RecyclerView.
         when (getItemViewType(position)) {
             VIEW_TYPE_ARTICLE -> {
                 val item = getItem(position)!!
-                (holder as ArticleViewHolder).apply {
+                (holder as ArticleViewHolder).run {
                     bind(
                         item,
-                        onArticleClick = View.OnClickListener {
+                        onArticleClick = {
                             clickEvent.onNext(item)
                         },
-                        onBookmarkClick = View.OnClickListener {
+                        onBookmarkClick = {
                             bookmarkEvent.onNext(Pair(position, item))
+                        },
+                        onSourceClick = {
+                            sourceClickEvent.onNext(item)
                         }
                     )
                 }

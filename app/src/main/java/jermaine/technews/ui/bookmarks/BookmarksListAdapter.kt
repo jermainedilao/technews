@@ -28,6 +28,11 @@ class BookmarksListAdapter(
     val clickEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
 
     /**
+     * Emits the item being clicked from the list view.
+     **/
+    val sourceClickEvent: PublishSubject<ArticleViewObject> = PublishSubject.create()
+
+    /**
      * Emits pair of position and ArticleViewObject of the item being bookmarked.
      **/
     val bookmarkEvent: PublishSubject<Pair<Int, ArticleViewObject>> = PublishSubject.create()
@@ -64,11 +69,14 @@ class BookmarksListAdapter(
                 (holder as ArticleViewHolder).apply {
                     bind(
                         item,
-                        onArticleClick = View.OnClickListener {
+                        onArticleClick = {
                             clickEvent.onNext(item)
                         },
-                        onBookmarkClick = View.OnClickListener {
+                        onBookmarkClick = {
                             bookmarkEvent.onNext(Pair(position, item))
+                        },
+                        onSourceClick = {
+                            sourceClickEvent.onNext(item)
                         }
                     )
                 }

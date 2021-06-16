@@ -16,6 +16,10 @@
         <variable
             name="bookmarkClick"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="sourceClick"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,10 +30,10 @@
             android:id="@+id/cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/list_item_card_vertical_margin"
-            android:layout_marginEnd="@dimen/list_item_card_horizontal_margin"
             android:layout_marginStart="@dimen/list_item_card_horizontal_margin"
             android:layout_marginTop="@dimen/list_item_card_vertical_margin"
+            android:layout_marginEnd="@dimen/list_item_card_horizontal_margin"
+            android:layout_marginBottom="@dimen/list_item_card_vertical_margin"
             android:alpha="@{item.containerAlpha}"
             android:background="@android:color/white"
             android:focusable="true"
@@ -61,9 +65,9 @@
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/list_item_card_padding"
                     android:layout_marginStart="@dimen/list_item_card_padding"
                     android:layout_marginTop="@dimen/list_item_card_padding"
+                    android:layout_marginEnd="@dimen/list_item_card_padding"
                     android:fontFamily="@font/montseratt_semi_bold"
                     android:lineSpacingExtra="@dimen/line_spacing"
                     android:text='@{item.title ?? ""}'
@@ -79,9 +83,9 @@
                     android:id="@+id/description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/list_item_card_padding"
                     android:layout_marginStart="@dimen/list_item_card_padding"
                     android:layout_marginTop="@dimen/list_item_card_padding"
+                    android:layout_marginEnd="@dimen/list_item_card_padding"
                     android:fontFamily="@font/merriweather"
                     android:lineSpacingExtra="@dimen/line_spacing"
                     android:text='@{item.description ?? ""}'
@@ -98,7 +102,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/list_item_card_padding"
                     android:layout_marginTop="@dimen/list_item_card_padding"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:fontFamily="@font/merriweather"
+                    android:onClick="@{sourceClick::onClick}"
                     android:text='@{item.source.name ?? ""}'
                     android:textColor="@color/pale_gray"
                     android:textSize="@dimen/text_size_small"
@@ -145,7 +152,7 @@
                     android:textColor="@{item.bookmarkButtonTextColorResId}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/description"
-                    tools:text="@string/bookmark_text" />
+                    tools:text="@string/bookmark" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

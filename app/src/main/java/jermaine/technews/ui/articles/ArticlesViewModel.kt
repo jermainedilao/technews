@@ -1,10 +1,10 @@
 package jermaine.technews.ui.articles
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Completable
 import jermaine.domain.articles.interactors.articles.bookmarks.BookmarkArticleUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.RemoveBookmarkedArticleUseCase
@@ -13,8 +13,10 @@ import jermaine.technews.base.BaseViewModel
 import jermaine.technews.ui.articles.data.ArticlesDataSourceFactory
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
+import javax.inject.Inject
 
-class ArticlesViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ArticlesViewModel @Inject constructor(
     private val bookmarkArticleUseCase: BookmarkArticleUseCase,
     val articlesDataSourceFactory: ArticlesDataSourceFactory,
     private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase,

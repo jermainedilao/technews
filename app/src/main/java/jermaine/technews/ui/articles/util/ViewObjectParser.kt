@@ -30,7 +30,7 @@ object ViewObjectParser {
                 publishedAtDisplay = getPublishedAtDisplay(publishedAt, resourceManager),
                 bookmarked = bookmarked,
                 bookmarkDrawableResId = if (bookmarked) R.drawable.ic_bookmark_blue_24dp else R.drawable.ic_bookmark_border_gray_24dp,
-                bookmarkButtonTextResId = R.string.bookmark_text,
+                bookmarkButtonTextResId = R.string.bookmark,
                 bookmarkButtonTextColorResId = if (bookmarked) R.color.blue else R.color.light_gray,
                 viewType = VIEW_TYPE_ARTICLE
             )

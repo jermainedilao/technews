@@ -23,6 +23,7 @@ import jermaine.technews.databinding.ActivityArticlesListBinding
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapterNew
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
+import jermaine.technews.util.NEWS_API_URL
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -73,7 +74,15 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
         adapter = ArticlesListAdapterNew()
         val manager = LinearLayoutManager(this)
 
-        val itemClick = adapter.clickEvent
+        val itemClick = adapter
+            .clickEvent
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                startBrowser(it.url)
+            }
+
+        val itemSourceClick = adapter
+            .sourceClickEvent
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 startBrowser(it.url)
@@ -88,7 +97,7 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
                 Log.d(TAG, "Done bookmarking/removing bookmark article.")
             }
 
-        viewModel.compositeDisposable.addAll(itemClick, bookmark)
+        viewModel.compositeDisposable.addAll(itemClick, bookmark, itemSourceClick)
 
         binding.recyclerView.layoutManager = manager
         (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -185,15 +194,19 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.bookmarks, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.view_bookmarks -> {
+            R.id.bookmarks -> {
                 val intent = Intent(this, BookmarksListActivity::class.java)
                 startActivity(intent)
+                true
+            }
+            R.id.info -> {
+                startBrowser(NEWS_API_URL)
                 true
             }
             else -> super.onOptionsItemSelected(item)

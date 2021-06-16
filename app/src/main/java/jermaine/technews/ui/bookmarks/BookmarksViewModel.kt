@@ -1,8 +1,8 @@
 package jermaine.technews.ui.bookmarks
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -14,8 +14,10 @@ import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
 import jermaine.technews.util.ResourceManager
+import javax.inject.Inject
 
-class BookmarksViewModel @ViewModelInject constructor(
+@HiltViewModel
+class BookmarksViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase,
     private val removeBookmarkedArticleUseCase: RemoveBookmarkedArticleUseCase

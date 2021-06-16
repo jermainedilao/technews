@@ -22,24 +22,32 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     implementation project(':domain')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation Libs.supportAppCompatV7
-    testImplementation Libs.mockitoCore
-    testImplementation Libs.mockitoKotlin
-    testImplementation Libs.jUnit
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation appcompat
+    testImplementation mockito_core
+    testImplementation mockito_kotlin
+    testImplementation junit
+    androidTestImplementation test_runner
+    androidTestImplementation espresso_core
 
     // Dagger annotation processor
-    kapt Libs.daggerCompiler
+    kapt dagger_compiler
 
     // Hilt annotation processor
-    kapt Libs.hiltCompiler
+    kapt hilt_android_compiler
 }
 repositories {
     mavenCentral()

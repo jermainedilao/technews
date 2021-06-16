@@ -28,36 +28,44 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     implementation project(':domain')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation Libs.supportAppCompatV7
-    testImplementation Libs.mockitoCore
-    testImplementation Libs.mockitoKotlin
-    testImplementation Libs.jUnit
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation appcompat
+    testImplementation mockito_core
+    testImplementation mockito_kotlin
+    testImplementation junit
+    androidTestImplementation test_runner
+    androidTestImplementation espresso_core
 
-    api Libs.gson
-    api Libs.retrofit
-    api Libs.gsonConverter
-    api Libs.rxAdapter
+    api "com.google.code.gson:gson:2.8.6"
+    api "com.squareup.retrofit2:retrofit:2.9.0"
+    api "com.squareup.retrofit2:converter-gson:2.9.0"
+    api "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
 
     // room
-    api Libs.room
-    kapt Libs.roomCompiler
+    api "androidx.room:room-runtime:2.3.0"
+    kapt "androidx.room:room-compiler:2.3.0"
 
     // rxjava2 support for room
-    api Libs.roomRxJava
+    api "androidx.room:room-rxjava2:2.3.0"
 
     // Dagger annotation processor
-    kapt Libs.daggerCompiler
+    kapt dagger_compiler
 
     // Hilt annotation processor
-    kapt Libs.hiltCompiler
+    kapt hilt_android_compiler
 }
 repositories {
     mavenCentral()

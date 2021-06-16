@@ -2,10 +2,10 @@ package jermaine.technews.di.module
 
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import jermaine.technews.application.App
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @EntryPoint
 interface AggregatorEntryPoint {
     fun inject(app: App)

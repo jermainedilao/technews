@@ -2,8 +2,8 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
@@ -11,17 +11,17 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation Libs.mockitoCore
-    testImplementation Libs.mockitoKotlin
-    testImplementation Libs.jUnit
+    testImplementation mockito_core
+    testImplementation mockito_kotlin
+    testImplementation junit
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
-    api Libs.rxJava
+    api "io.reactivex.rxjava2:rxjava:2.2.21"
 
-    api Libs.dagger
-    kapt Libs.daggerCompiler
+    api "com.google.dagger:dagger:2.36"
+    kapt "com.google.dagger:dagger-compiler:2.36"
 
     // Hilt
-    api Libs.hilt
-    kapt Libs.hiltCompiler
+    api "com.google.dagger:hilt-core:${hilt_version}"
+    kapt hilt_android_compiler
 }

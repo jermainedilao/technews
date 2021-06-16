@@ -14,7 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:alpha="0.5"
-        android:text="@string/attribution_text"
+        android:text="@string/attribution"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"

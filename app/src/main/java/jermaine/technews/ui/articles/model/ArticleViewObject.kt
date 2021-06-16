@@ -18,7 +18,7 @@ data class ArticleViewObject(
     var publishedAtDisplay: String = "",
     var bookmarked: Boolean = false,
     var bookmarkDrawableResId: Int = 0,
-    var bookmarkButtonTextResId: Int = R.string.bookmark_text,
+    var bookmarkButtonTextResId: Int = R.string.bookmark,
     var bookmarkButtonTextColorResId: Int = R.color.light_gray,
     var containerAlpha: Float = DEFAULT_STATE,
     var viewType: Int
