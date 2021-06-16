@@ -32,8 +32,8 @@ android {
         applicationId "jermaine.technews"
         minSdkVersion AppConfig.minSdkVersion
         targetSdkVersion AppConfig.targetSdkVersion
-        versionCode 10
-        versionName "1.4.3"
+        versionCode 11
+        versionName "1.4.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
