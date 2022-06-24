@@ -3,17 +3,24 @@
     package="jermaine.technews">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- region Required for Kaspresso -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!-- endregion Required for Kaspresso -->
 
     <application
         android:name=".application.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="jermaine.technews.ui.articles.ArticlesListActivity">
+            android:name="jermaine.technews.ui.articles.ArticlesListActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,9 +40,11 @@
 
         <receiver android:name="jermaine.device.notifications.alarms.DailyNotificationsAlarmReceiver" />
 
-        <receiver android:name="jermaine.device.broadcastreceivers.AppUpdateReceiver">
+        <receiver
+            android:name="jermaine.device.broadcastreceivers.AppUpdateReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
     </application>

@@ -34,7 +34,7 @@ android {
         targetSdkVersion AppConfig.targetSdkVersion
         versionCode 11
         versionName "1.4.4"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -75,8 +75,11 @@ dependencies {
     testImplementation mockito_core
     testImplementation mockito_kotlin
     testImplementation junit
+    androidTestImplementation android_junit
     androidTestImplementation test_runner
+    androidTestImplementation test_rules
     androidTestImplementation espresso_core
+    androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.4.1'
 
     implementation "com.github.bumptech.glide:glide:4.12.0"
     kapt "com.github.bumptech.glide:compiler:4.12.0"
