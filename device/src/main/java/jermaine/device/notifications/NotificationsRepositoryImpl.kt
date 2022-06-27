@@ -2,6 +2,7 @@ package jermaine.device.notifications
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -33,7 +34,7 @@ class NotificationsRepositoryImpl @Inject constructor(
 
         val intent = Intent(context, DailyNotificationsAlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
-                context, 0, intent, 0
+                context, 0, intent, FLAG_IMMUTABLE
         )
 
         if (System.currentTimeMillis() > calendar.timeInMillis) {

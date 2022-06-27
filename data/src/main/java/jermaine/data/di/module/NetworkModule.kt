@@ -5,9 +5,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import jermaine.data.BuildConfig
 import jermaine.data.articles.ApiService
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,14 +27,25 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun providesOkHttpClient(cache: Cache): OkHttpClient = OkHttpClient.Builder()
-        .cache(cache)
-        .build()
+    fun providesOkHttpClient(cache: Cache): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor()
+            logging.level = HttpLoggingInterceptor.Level.BODY
+            builder.addInterceptor(logging)
+        }
+
+        return builder
+            .cache(cache)
+            .build()
+    }
 
     @Singleton
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://technews-api.appspot.com")
+        // .baseUrl("https://technews-api.appspot.com")
+        .baseUrl("https://newsapi.org/v2/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(okHttpClient)
