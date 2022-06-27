@@ -47,6 +47,8 @@ And you're all set!
 * [Mockito](https://github.com/mockito/mockito) - For mocking objects in unit testing.
 * [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) - Helper class for using mockito with kotlin.
 * [jUnit](https://junit.org/junit4/) - For unit testing.
+* [Kaspresso](https://github.com/KasperskyLab/Kaspresso) - For UI testing.
+* [Kakao](https://github.com/KakaoCup/Kakao) - For UI testing.
 
 ### Todo
 * Build unit tests
