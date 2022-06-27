@@ -1,11 +1,15 @@
 package jermaine.technews.ui
 
 import android.Manifest
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
+import jermaine.data.db.AppDatabase
+import jermaine.technews.application.App
+import org.junit.Before
 import org.junit.Rule
 
 abstract class BaseTestCase : TestCase(
@@ -32,4 +36,11 @@ abstract class BaseTestCase : TestCase(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
+    @Before
+    open fun setUp() {
+        ApplicationProvider
+            .getApplicationContext<App>()
+            .deleteDatabase(AppDatabase.DATABASE_NAME)
+    }
 }
