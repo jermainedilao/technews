@@ -16,9 +16,8 @@ class ArticlesRepositoryImpl @Inject constructor(
         private val articlesDao: ArticlesDao
 ) : ArticlesRepository {
 
-    override fun fetchArticles(page: Int): Single<List<Article>> =
+    override suspend fun fetchArticles(page: Int): List<Article> =
             articlesService.fetchArticles(page)
-                    .subscribeOn(Schedulers.io())
 
     override fun bookMarkArticle(article: Article): Completable =
             articlesDao.bookMarkArticle(article)

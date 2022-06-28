@@ -17,7 +17,6 @@ class ArticlesServiceImpl @Inject constructor(
      *
      * @param page Page to be returned (used for pagination).
      **/
-    override fun fetchArticles(page: Int): Single<List<Article>> =
-        apiService.fetchArticles(page, BuildConfig.NEWS_API_KEY)
-            .map { it.articles }
+    override suspend fun fetchArticles(page: Int): List<Article> =
+        apiService.fetchArticles(page, BuildConfig.NEWS_API_KEY).articles
 }

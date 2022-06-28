@@ -11,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
+import jermaine.domain.articles.model.Article
 import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
@@ -19,6 +20,9 @@ import jermaine.technews.util.NEWS_API_URL
 import jermaine.technews.util.ResourceManager
 import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.rx2.asObservable
 
 
 class ArticlesDataSource(
@@ -45,9 +49,15 @@ class ArticlesDataSource(
      *
      * @see uiState
      */
-    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, ArticleViewObject>) {
-        val disposable = fetchArticlesListUseCase.execute(1)
-            .flatMapObservable {
+    override fun loadInitial(
+        params: LoadInitialParams<Int>,
+        callback: LoadInitialCallback<Int, ArticleViewObject>
+    ) {
+        val disposable = flow {
+            emit(fetchArticlesListUseCase.execute(1))
+        }
+            .asObservable()
+            .flatMap {
                 Observable.fromIterable(it)  // Convert list to iterable.
             }
             .map {
@@ -82,9 +92,15 @@ class ArticlesDataSource(
      *
      * @see paginateState
      */
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, ArticleViewObject>) {
-        val disposable = fetchArticlesListUseCase.execute(params.key)
-            .flatMapObservable {
+    override fun loadAfter(
+        params: LoadParams<Int>,
+        callback: LoadCallback<Int, ArticleViewObject>
+    ) {
+        val disposable = flow {
+            emit(fetchArticlesListUseCase.execute(params.key))
+        }
+            .asObservable()
+            .flatMap {
                 Observable.fromIterable(it)  // Convert list to iterable.
             }
             .map {
@@ -181,7 +197,10 @@ class ArticlesDataSource(
         list.add(0, item)
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, ArticleViewObject>) = Unit
+    override fun loadBefore(
+        params: LoadParams<Int>,
+        callback: LoadCallback<Int, ArticleViewObject>
+    ) = Unit
 
     fun destroy() {
         compositeDisposable.clear()

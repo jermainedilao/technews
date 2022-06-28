@@ -11,7 +11,7 @@ interface ArticlesRepository {
      *
      * @param page Page to be returned (used for pagination).
      **/
-    fun fetchArticles(page: Int): Single<List<Article>>
+    suspend fun fetchArticles(page: Int): List<Article>
 
     /**
      * Sets article.bookmark to true.
