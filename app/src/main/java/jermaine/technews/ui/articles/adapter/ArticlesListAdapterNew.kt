@@ -95,7 +95,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun setLoadingState(position: Int) {
-        snapshot()[position]!!.containerAlpha = ArticleViewObject.LOADING_STATE
+        getItem(position)!!.containerAlpha = ArticleViewObject.LOADING_STATE
         notifyItemChanged(position)
     }
 
@@ -105,7 +105,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun setDefaultState(position: Int) {
-        snapshot()[position]!!.containerAlpha = ArticleViewObject.DEFAULT_STATE
+        getItem(position)!!.containerAlpha = ArticleViewObject.DEFAULT_STATE
         notifyItemChanged(position)
     }
 
@@ -115,7 +115,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun bookmarkArticle(position: Int): Completable {
-        snapshot()[position]!!.apply {
+        getItem(position)!!.apply {
             bookmarked = true
             bookmarkDrawableResId = R.drawable.ic_bookmark_blue_24dp
             bookmarkButtonTextColorResId = R.color.blue
@@ -130,7 +130,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun removeBookmarkedArticle(position: Int): Completable {
-        snapshot()[position]!!.apply {
+        getItem(position)!!.apply {
             bookmarked = false
             bookmarkDrawableResId = R.drawable.ic_bookmark_border_gray_24dp
             bookmarkButtonTextColorResId = R.color.light_gray
@@ -162,6 +162,6 @@ class ArticlesListAdapterNew :
         if (paginateState && position == itemCount - 1) {
             return VIEW_TYPE_LOADER
         }
-        return snapshot()[position]!!.viewType
+        return getItem(position)!!.viewType
     }
 }

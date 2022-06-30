@@ -75,6 +75,7 @@ And you're all set!
     * [x] Bookmark/un-bookmark button inside articles list
     * [x] Bookmark item in articles list and validate if visible in bookmarks list
     * [ ] Un-bookmark from bookmarks list (needs observable queries)
+    * [ ] Click an article
 * [x] Migrate to Paging 3
 * [ ] Observable queries (DB as single source of truth)
 * [ ] Migrate to coroutines (WIP)
