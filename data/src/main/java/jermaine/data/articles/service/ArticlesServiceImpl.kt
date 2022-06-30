@@ -1,6 +1,5 @@
 package jermaine.data.articles.service
 
-import io.reactivex.Single
 import jermaine.data.BuildConfig
 import jermaine.data.articles.ApiService
 import jermaine.domain.articles.model.Article
