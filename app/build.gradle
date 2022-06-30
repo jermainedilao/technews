@@ -92,7 +92,7 @@ dependencies {
     implementation "com.google.firebase:firebase-crashlytics:18.0.1"
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"

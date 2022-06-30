@@ -1,139 +1,56 @@
 package jermaine.technews.ui.articles.data
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.paging.PageKeyedDataSource
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.SingleSource
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import jermaine.domain.articles.interactors.articles.FetchArticlesListUseCase
 import jermaine.domain.articles.interactors.articles.bookmarks.FetchBookmarkedArticleUseCase
-import jermaine.domain.articles.model.Article
-import jermaine.technews.R
 import jermaine.technews.ui.articles.model.ArticleViewObject
-import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
 import jermaine.technews.util.NEWS_API_URL
 import jermaine.technews.util.ResourceManager
-import jermaine.technews.util.VIEW_TYPE_ARTICLE
 import jermaine.technews.util.VIEW_TYPE_ATTRIBUTION
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.rx2.asObservable
 
 
 class ArticlesDataSource(
     private val resourceManager: ResourceManager,
     private val fetchArticlesListUseCase: FetchArticlesListUseCase,
     private val fetchBookmarkedArticleUseCase: FetchBookmarkedArticleUseCase
-) : PageKeyedDataSource<Int, ArticleViewObject>() {
+) : PagingSource<Int, ArticleViewObject>() {
 
     companion object {
         private const val TAG = "ArticlesDataSource"
-        private val INITIAL_UI_STATE = UIState.Loading
     }
 
-    private val compositeDisposable = CompositeDisposable()
-    val uiState = MutableLiveData<UIState>(INITIAL_UI_STATE)
-    val paginateState = MutableLiveData<Boolean>()
-
-    /**
-     * Fetches initial list of articles.
-     *
-     * Also, updates bookmark status of the articles inside the list.
-     *
-     * This is also responsible to update uiState.
-     *
-     * @see uiState
-     */
-    override fun loadInitial(
-        params: LoadInitialParams<Int>,
-        callback: LoadInitialCallback<Int, ArticleViewObject>
-    ) {
-        val disposable = flow {
-            emit(fetchArticlesListUseCase.execute(1))
-        }
-            .asObservable()
-            .flatMap {
-                Observable.fromIterable(it)  // Convert list to iterable.
-            }
-            .map {
-                ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
-            }
-            .toList()
-            .flatMap { updateBookMarkStatusFromList(it) }
-            .doOnSubscribe {
-                // Show refreshing in loading initial state
-                uiState.postValue(UIState.Loading)
-            }
-            .doOnSuccess { uiState.postValue(UIState.HasData) }
-            .doOnError { uiState.postValue(UIState.Error(R.string.error_text)) }
-            .subscribe({
-                callback.onResult(it, 1, 2)
-            }, {
-                Log.e(TAG, "loadInitial", it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            })
-
-        compositeDisposable.add(disposable)
+    override fun getRefreshKey(state: PagingState<Int, ArticleViewObject>): Int? {
+        return null
     }
 
-    /**
-     * Fetches succeeding pages of articles.
-     *
-     * Also, updates bookmark status of the articles inside the list.
-     *
-     * Also, adds News API attribution at the beginning of the list in every new page.
-     *
-     * This is also responsible to trigger paginateState to show or not.
-     *
-     * @see paginateState
-     */
-    override fun loadAfter(
-        params: LoadParams<Int>,
-        callback: LoadCallback<Int, ArticleViewObject>
-    ) {
-        val disposable = flow {
-            emit(fetchArticlesListUseCase.execute(params.key))
-        }
-            .asObservable()
-            .flatMap {
-                Observable.fromIterable(it)  // Convert list to iterable.
-            }
-            .map {
-                ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
-            }
-            .toList()
-            .flatMap {
-                updateBookMarkStatusFromList(it)
-            }
-            .map {
-                if (it.isNotEmpty()) {
-                    addAttribution(it)
-                }
-                it
-            }
-            .doOnSubscribe {
-                // Show refreshing in loading initial state
-                paginateState.postValue(true)
-            }
-            .doOnSuccess { paginateState.postValue(false) }
-            .doOnError { paginateState.postValue(false) }
-            .subscribe({
-                if (it.isNullOrEmpty()) {
-                    callback.onResult(emptyList(), null)
-                } else {
-                    callback.onResult(it, params.key + 1)
-                }
-            }, {
-                Log.e(TAG, "loadAfter", it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            })
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ArticleViewObject> {
+        val key = params.key ?: 1
+        val articles = fetchArticlesListUseCase.execute(params.key ?: 1)
+        return try {
+            val page = LoadResult.Page(
+                updateBookMarkStatusFromList(
+                    articles.map {
+                        ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
+                    }
+                ).apply {
+                    if (key != 1 && isNotEmpty()) {
+                        addAttribution(this)
+                    }
+                },
+                null,
+                if (articles.isEmpty()) null else key + 1
+            )
 
-        compositeDisposable.add(disposable)
+            page
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            LoadResult.Error(e)
+        }
     }
 
     /**
@@ -141,40 +58,19 @@ class ArticlesDataSource(
      *
      * @param list The list to be updated.
      */
-    private fun updateBookMarkStatusFromList(list: List<ArticleViewObject>): Single<MutableList<ArticleViewObject>> {
-        val zipper = BiFunction<
-            List<ArticleViewObject>,
-            List<ArticleViewObject>,
-            Pair<List<ArticleViewObject>, List<ArticleViewObject>>> { t1, t2 -> Pair(t1, t2) }
-        return Single.just(list)
-            .zipWith(fetchBookmarkedArticles(), zipper)
-            .flatMapObservable {
-                val articles = it.first
-                val bookmarks = it.second
-                Observable.fromIterable(articles)
-                    .concatMap { article ->
-                        Observable.fromIterable(bookmarks)
-                            .filter {
-                                article.id.contentEquals(it.id)
-                            }
-                            .first(ArticleViewObject(id = "none", viewType = VIEW_TYPE_ARTICLE))
-                            .map {
-                                val bookmarked = !it.id.contentEquals("none")
-
-                                article.setBookmarkDetails(bookmarked)
-
-                                article
-                            }
-                            .toObservable()
-                    }
-            }
-            .toList()
+    private fun updateBookMarkStatusFromList(list: List<ArticleViewObject>): MutableList<ArticleViewObject> {
+        val bookmarks = fetchBookmarkedArticles().blockingGet()
+            .map { it.id }
+        return list.map { article ->
+            article.setBookmarkDetails(bookmarks.contains(article.id))
+            article
+        }.toMutableList()
     }
 
     /**
      * Returns list of bookmarked articles.
      */
-    private fun fetchBookmarkedArticles(): SingleSource<List<ArticleViewObject>> {
+    private fun fetchBookmarkedArticles(): Single<List<ArticleViewObject>> {
         return fetchBookmarkedArticleUseCase.execute(1)
             .flatMapObservable { bookmarkedList ->
                 Observable.fromIterable(bookmarkedList)
@@ -195,14 +91,5 @@ class ArticlesDataSource(
         val item = ArticleViewObject(viewType = VIEW_TYPE_ATTRIBUTION)
         item.url = NEWS_API_URL
         list.add(0, item)
-    }
-
-    override fun loadBefore(
-        params: LoadParams<Int>,
-        callback: LoadCallback<Int, ArticleViewObject>
-    ) = Unit
-
-    fun destroy() {
-        compositeDisposable.clear()
     }
 }

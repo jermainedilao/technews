@@ -65,6 +65,8 @@ class ArticlesListActivityTest : BaseTestCase() {
         }
     }
 
+    // TODO: add test for pagination
+
 // Needs refactoring. (Observable queries)
 //    @Test
 //    fun testUnBookmarkFromBookmarkListScreen() {

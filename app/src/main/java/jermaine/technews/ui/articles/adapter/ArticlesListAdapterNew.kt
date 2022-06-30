@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
@@ -19,7 +20,7 @@ import jermaine.technews.util.VIEW_TYPE_LOADER
 
 
 class ArticlesListAdapterNew :
-    PagedListAdapter<ArticleViewObject, RecyclerView.ViewHolder>(ArticleViewObject.diffCallback) {
+    PagingDataAdapter<ArticleViewObject, RecyclerView.ViewHolder>(ArticleViewObject.diffCallback) {
     /**
      * Emits the item being clicked from the list view.
      **/
@@ -94,7 +95,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun setLoadingState(position: Int) {
-        getItem(position)!!.containerAlpha = ArticleViewObject.LOADING_STATE
+        snapshot()[position]!!.containerAlpha = ArticleViewObject.LOADING_STATE
         notifyItemChanged(position)
     }
 
@@ -104,7 +105,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun setDefaultState(position: Int) {
-        getItem(position)!!.containerAlpha = ArticleViewObject.DEFAULT_STATE
+        snapshot()[position]!!.containerAlpha = ArticleViewObject.DEFAULT_STATE
         notifyItemChanged(position)
     }
 
@@ -114,7 +115,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun bookmarkArticle(position: Int): Completable {
-        getItem(position)!!.apply {
+        snapshot()[position]!!.apply {
             bookmarked = true
             bookmarkDrawableResId = R.drawable.ic_bookmark_blue_24dp
             bookmarkButtonTextColorResId = R.color.blue
@@ -129,7 +130,7 @@ class ArticlesListAdapterNew :
      * @param position Position of the item inside the list.
      */
     fun removeBookmarkedArticle(position: Int): Completable {
-        getItem(position)!!.apply {
+        snapshot()[position]!!.apply {
             bookmarked = false
             bookmarkDrawableResId = R.drawable.ic_bookmark_border_gray_24dp
             bookmarkButtonTextColorResId = R.color.light_gray
@@ -161,6 +162,6 @@ class ArticlesListAdapterNew :
         if (paginateState && position == itemCount - 1) {
             return VIEW_TYPE_LOADER
         }
-        return getItem(position)!!.viewType
+        return snapshot()[position]!!.viewType
     }
 }

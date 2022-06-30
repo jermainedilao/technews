@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
+import androidx.paging.CombinedLoadStates
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +24,7 @@ import jermaine.technews.databinding.ActivityArticlesListBinding
 import jermaine.technews.ui.articles.adapter.ArticlesListAdapterNew
 import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.bookmarks.BookmarksListActivity
+import jermaine.technews.ui.util.PaginationUtils
 import jermaine.technews.util.NEWS_API_URL
 import java.util.concurrent.TimeUnit
 
@@ -36,6 +38,7 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
         get() = R.layout.activity_articles_list
 
     private lateinit var adapter: ArticlesListAdapterNew
+    private lateinit var loadStateListener: (CombinedLoadStates) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +51,8 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
         setLoadingIndicators()
 
         // Fetch articles
-        viewModel.articlesListLiveData.observe(this, Observer {
-            adapter.submitList(it)
+        viewModel.articles.observe(this, Observer {
+            adapter.submitData(lifecycle, it)
         })
 
         createDailyNotification()
@@ -101,6 +104,14 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
 
         binding.recyclerView.layoutManager = manager
         (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        loadStateListener = { loadStates ->
+            viewModel.onLoadStateChanged(
+                loadStates,
+                adapter.snapshot().items.isEmpty()
+            )
+        }
+
+        adapter.addLoadStateListener(loadStateListener)
         binding.recyclerView.adapter = adapter
     }
 
@@ -161,7 +172,7 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
      **/
     private fun setSwipeRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.articlesDataSourceFactory.articlesDataSourceLiveData.value!!.invalidate()
+            adapter.refresh()
         }
     }
 
@@ -169,14 +180,44 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
      * Responsible for showing the paginate indicator in UI.
      **/
     private fun setLoadingIndicators() {
-        // Responsible for showing the paginate indicator.
-        Transformations.switchMap(
-            viewModel.articlesDataSourceFactory.articlesDataSourceLiveData
-        ) {
-            it.paginateState
-        }.observe(this, Observer { paginate ->
-            adapter.setPaginateState(paginate!!)
-        })
+        viewModel.paginationState.observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    handlePaginationState(it)
+                },
+                {
+                    Log.e(TAG, "setLoadingIndicators", it)
+                }
+            )
+    }
+
+    private fun handlePaginationState(paginationState: PaginationUtils.PaginationUtilStates) {
+        when (paginationState) {
+            PaginationUtils.PaginationUtilStates.ShowLoading,
+            PaginationUtils.PaginationUtilStates.ShowLoadingFirstLoad -> {
+                binding.swipeRefreshLayout.isRefreshing = true
+            }
+            PaginationUtils.PaginationUtilStates.HideLoading -> {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+            PaginationUtils.PaginationUtilStates.HideLoadingShowEmptyView -> {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+            PaginationUtils.PaginationUtilStates.ShowLoadingPagination -> {
+                adapter.setPaginateState(true)
+            }
+            PaginationUtils.PaginationUtilStates.HideAllLoadingAndEmptyView -> {
+                adapter.setPaginateState(false)
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+            PaginationUtils.PaginationUtilStates.Error -> {
+                Toast.makeText(
+                    this,
+                    getString(R.string.error_text),
+                    Toast.LENGTH_SHORT
+                )
+            }
+        }
     }
 
     /**
