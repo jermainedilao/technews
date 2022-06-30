@@ -76,6 +76,7 @@ And you're all set!
     * [x] Bookmark item in articles list and validate if visible in bookmarks list
     * [ ] Un-bookmark from bookmarks list (needs observable queries)
 * [x] Migrate to Paging 3
+* [ ] Observable queries (DB as single source of truth)
 * [ ] Migrate to coroutines (WIP)
 * [ ] Local pagination in Bookmarks screen
 * [ ] Add sources screen to allow users to pick news sources that they want.
