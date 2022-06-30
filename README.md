@@ -69,16 +69,16 @@ And you're all set!
 
 ### Todo
 
-* [] Build unit tests
-* [] UI Tests
+* [ ] Build unit tests
+* [ ] UI Tests
     * [x] List visibility
     * [x] Bookmark/un-bookmark button inside articles list
     * [x] Bookmark item in articles list and validate if visible in bookmarks list
-    * [] Un-bookmark from bookmarks list (needs observable queries)
+    * [ ] Un-bookmark from bookmarks list (needs observable queries)
 * [x] Migrate to Paging 3
-* [] Migrate to coroutines (WIP)
-* [] Local pagination in Bookmarks screen
-* Add sources screen to allow users to pick news sources that they want.
+* [ ] Migrate to coroutines (WIP)
+* [ ] Local pagination in Bookmarks screen
+* [ ] Add sources screen to allow users to pick news sources that they want.
 
 ### Inspiration
 
