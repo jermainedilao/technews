@@ -13,6 +13,7 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("apiKey") newsApiKey: String,
         @Query("pageSize") pageSize: Int = PAGE_SIZE,
-        @Query("sources") sources: String = "techcrunch,techradar,the-next-web,wired,the-verge",
+        @Query("sources") sources: String = "techcrunch,techradar,the-next-web,wired," +
+            "the-verge,mashable,ars-technica,engadget,hacker-news,recode",
     ): Single<FetchArticlesApiResponse>
 }
