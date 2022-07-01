@@ -58,8 +58,8 @@ class ArticlesDataSource(
      *
      * @param list The list to be updated.
      */
-    private fun updateBookMarkStatusFromList(list: List<ArticleViewObject>): MutableList<ArticleViewObject> {
-        val bookmarks = fetchBookmarkedArticles().blockingGet()
+    private suspend fun updateBookMarkStatusFromList(list: List<ArticleViewObject>): MutableList<ArticleViewObject> {
+        val bookmarks = fetchBookmarkedArticles()
             .map { it.id }
         return list.map { article ->
             article.setBookmarkDetails(bookmarks.contains(article.id))
@@ -70,18 +70,14 @@ class ArticlesDataSource(
     /**
      * Returns list of bookmarked articles.
      */
-    private fun fetchBookmarkedArticles(): Single<List<ArticleViewObject>> {
+    private suspend fun fetchBookmarkedArticles(): List<ArticleViewObject> {
         return fetchBookmarkedArticleUseCase.execute(1)
-            .flatMapObservable { bookmarkedList ->
-                Observable.fromIterable(bookmarkedList)
-            }
-            .map {
+            .map { article ->
                 ViewObjectParser.articleToViewObjectRepresentation(
-                    it,
+                    article,
                     resourceManager
                 )
             }
-            .toList()
     }
 
     /**

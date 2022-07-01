@@ -79,6 +79,7 @@ And you're all set!
 * [x] Migrate to Paging 3
 * [ ] Observable queries (DB as single source of truth)
 * [ ] Migrate to coroutines (WIP)
+* [ ] Convert to MVI
 * [ ] Local pagination in Bookmarks screen
 * [ ] Add sources screen to allow users to pick news sources that they want.
 

@@ -2,6 +2,7 @@ package jermaine.technews.ui.bookmarks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -14,6 +15,7 @@ import jermaine.technews.ui.articles.model.ArticleViewObject
 import jermaine.technews.ui.articles.model.UIState
 import jermaine.technews.ui.articles.util.ViewObjectParser
 import jermaine.technews.util.ResourceManager
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,28 +30,33 @@ class BookmarksViewModel @Inject constructor(
     }
     val uiState: LiveData<UIState> = _uiState
 
+    private val _bookmarkedArticles by lazy {
+        MutableLiveData<List<ArticleViewObject>>()
+    }
+
+    val bookmarkedArticles: LiveData<List<ArticleViewObject>> = _bookmarkedArticles
+
     /**
      * Returns list of bookmarked articles.
      **/
-    fun fetchBookmarkedArticles(page: Int): Single<List<ArticleViewObject>> =
-        fetchBookmarkedArticleUseCase
-            .execute(page)
-            .doOnSubscribe {
+    fun fetchBookmarkedArticles(page: Int) {
+        viewModelScope.launch {
+            try {
                 _uiState.postValue(UIState.Loading)
-            }
-            .doOnSuccess {
+
+                _bookmarkedArticles.value = fetchBookmarkedArticleUseCase
+                    .execute(page)
+                    .map {
+                        ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
+                    }
+
                 _uiState.postValue(UIState.HasData)
-            }
-            .doOnError {
+            } catch (e: Exception) {
                 _uiState.postValue(UIState.Error(R.string.error_text))
             }
-            .flatMapObservable {
-                Observable.fromIterable(it)
-            }
-            .map {
-                ViewObjectParser.articleToViewObjectRepresentation(it, resourceManager)
-            }
-            .toList()
+
+        }
+    }
 
     /**
      * Removes bookmarked article.

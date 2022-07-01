@@ -22,7 +22,7 @@ class ArticlesRepositoryImpl @Inject constructor(
     override fun bookMarkArticle(article: Article): Completable =
             articlesDao.bookMarkArticle(article)
 
-    override fun fetchBookMarkedArticles(page: Int): Single<List<Article>> =
+    override suspend fun fetchBookMarkedArticles(page: Int): List<Article> =
             articlesDao.fetchBookmarkedArticles(page)
 
     override fun fetchAllBookMarkedArticles(): Single<List<Article>> =

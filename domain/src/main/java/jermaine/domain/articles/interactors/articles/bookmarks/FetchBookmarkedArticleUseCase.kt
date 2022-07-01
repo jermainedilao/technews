@@ -1,9 +1,8 @@
 package jermaine.domain.articles.interactors.articles.bookmarks
 
-import io.reactivex.Single
 import jermaine.domain.articles.ArticlesRepository
 import jermaine.domain.articles.model.Article
-import jermaine.domain.interactortype.SingleWithParamUseCase
+import jermaine.domain.interactortype.WithParamUseCase
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,8 +12,8 @@ import javax.inject.Singleton
  **/
 @Singleton
 class FetchBookmarkedArticleUseCase @Inject constructor(
-        private val articlesRepository: ArticlesRepository
-) : SingleWithParamUseCase<Int, List<Article>> {
-    override fun execute(page: Int): Single<List<Article>> =
-            articlesRepository.fetchBookMarkedArticles(page)
+    private val articlesRepository: ArticlesRepository
+) : WithParamUseCase<Int, List<Article>> {
+    override suspend fun execute(page: Int): List<Article> =
+        articlesRepository.fetchBookMarkedArticles(page)
 }

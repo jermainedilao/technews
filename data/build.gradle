@@ -57,11 +57,12 @@ dependencies {
     api "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
 
     // room
-    api "androidx.room:room-runtime:2.3.0"
-    kapt "androidx.room:room-compiler:2.3.0"
+    api "androidx.room:room-runtime:2.4.2"
+    implementation "androidx.room:room-ktx:2.4.2"
+    kapt "androidx.room:room-compiler:2.4.2"
 
     // rxjava2 support for room
-    api "androidx.room:room-rxjava2:2.3.0"
+    api "androidx.room:room-rxjava2:2.4.2"
 
     // Dagger annotation processor
     kapt dagger_compiler

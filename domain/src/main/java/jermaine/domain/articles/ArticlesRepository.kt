@@ -21,7 +21,7 @@ interface ArticlesRepository {
     /**
      * Returns list of bookmarked articles.
      **/
-    fun fetchBookMarkedArticles(page: Int): Single<List<Article>>
+    suspend fun fetchBookMarkedArticles(page: Int): List<Article>
 
     /**
      * Returns list of bookmarked articles.

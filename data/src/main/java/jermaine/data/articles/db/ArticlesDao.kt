@@ -6,7 +6,7 @@ import jermaine.domain.articles.model.Article
 
 
 interface ArticlesDao {
-    fun fetchBookmarkedArticles(page: Int): Single<List<Article>>
+    suspend fun fetchBookmarkedArticles(page: Int): List<Article>
 
     fun fetchAllBookmarkedArticles(): Single<List<Article>>
 

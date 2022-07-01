@@ -41,24 +41,18 @@ class BookmarksListActivity : BaseActivity<ActivityBookmarksListBinding, Bookmar
         setSupportActionBar(binding.toolbar)
         initializeToolbar()
         initializeList()
-        fetchBookmarkedArticles()
+        setupViewModelObservers()
+
+        viewModel.fetchBookmarkedArticles(1)
+    }
+
+    private fun setupViewModelObservers() {
+        viewModel.bookmarkedArticles.observe(this, ::updateList)
     }
 
     private fun initializeToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.bookmarks)
-    }
-
-    private fun fetchBookmarkedArticles() {
-        viewModel.compositeDisposable.add(
-            viewModel.fetchBookmarkedArticles(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    updateList(it)
-                }, {
-                    Log.e(TAG, "onCreate: ", it)
-                })
-        )
     }
 
     /**

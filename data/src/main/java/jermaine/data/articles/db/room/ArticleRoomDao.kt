@@ -10,6 +10,9 @@ interface ArticleRoomDao {
     @Query("SELECT * FROM articles")
     fun fetchArticles(): Single<List<ArticleModel>>
 
+    @Query("SELECT * FROM articles")
+    suspend fun fetchArticlesCo(): List<ArticleModel>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveArticle(article: ArticleModel)
 

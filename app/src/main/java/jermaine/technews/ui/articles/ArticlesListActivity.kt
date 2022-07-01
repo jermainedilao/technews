@@ -215,7 +215,7 @@ class ArticlesListActivity : BaseActivity<ActivityArticlesListBinding, ArticlesV
                     this,
                     getString(R.string.error_text),
                     Toast.LENGTH_SHORT
-                )
+                ).show()
             }
         }
     }
