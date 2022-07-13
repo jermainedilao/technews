@@ -19,8 +19,12 @@ jobs:
         distribution: 'adopt-hotspot'
         cache: gradle
     - name: write keystore.properties file
+      env:
+        KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
       run: |
         touch keystore.properties
+        echo $KEYSTORE_PROPERTIES >> keystore.properties
+        cat keystore.properties
 
     - name: write build.properties file
       env:
