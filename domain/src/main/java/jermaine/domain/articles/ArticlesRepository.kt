@@ -24,11 +24,6 @@ interface ArticlesRepository {
     suspend fun fetchBookMarkedArticles(page: Int): List<Article>
 
     /**
-     * Returns list of bookmarked articles.
-     **/
-    fun fetchAllBookMarkedArticles(): Single<List<Article>>
-
-    /**
      * Sets article.bookmark to false.
      **/
     fun removeBookmarkedArticle(article: Article): Completable

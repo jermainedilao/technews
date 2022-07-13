@@ -8,8 +8,6 @@ import jermaine.domain.articles.model.Article
 interface ArticlesDao {
     suspend fun fetchBookmarkedArticles(page: Int): List<Article>
 
-    fun fetchAllBookmarkedArticles(): Single<List<Article>>
-
     fun bookMarkArticle(article: Article): Completable
 
     fun removeBookmarkedArticle(article: Article): Completable

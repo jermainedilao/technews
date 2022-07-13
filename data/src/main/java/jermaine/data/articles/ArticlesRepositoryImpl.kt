@@ -1,8 +1,6 @@
 package jermaine.data.articles
 
 import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import jermaine.data.articles.db.ArticlesDao
 import jermaine.data.articles.service.ArticlesService
 import jermaine.domain.articles.ArticlesRepository
@@ -12,22 +10,18 @@ import javax.inject.Singleton
 
 @Singleton
 class ArticlesRepositoryImpl @Inject constructor(
-        private val articlesService: ArticlesService,
-        private val articlesDao: ArticlesDao
+    private val articlesService: ArticlesService,
+    private val articlesDao: ArticlesDao
 ) : ArticlesRepository {
-
     override suspend fun fetchArticles(page: Int): List<Article> =
-            articlesService.fetchArticles(page)
+        articlesService.fetchArticles(page)
 
     override fun bookMarkArticle(article: Article): Completable =
-            articlesDao.bookMarkArticle(article)
+        articlesDao.bookMarkArticle(article)
 
     override suspend fun fetchBookMarkedArticles(page: Int): List<Article> =
-            articlesDao.fetchBookmarkedArticles(page)
-
-    override fun fetchAllBookMarkedArticles(): Single<List<Article>> =
-            articlesDao.fetchAllBookmarkedArticles()
+        articlesDao.fetchBookmarkedArticles(page)
 
     override fun removeBookmarkedArticle(article: Article): Completable =
-            articlesDao.removeBookmarkedArticle(article)
+        articlesDao.removeBookmarkedArticle(article)
 }

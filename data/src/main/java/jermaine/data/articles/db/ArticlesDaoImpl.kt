@@ -17,18 +17,6 @@ import javax.inject.Singleton
 class ArticlesDaoImpl @Inject constructor(
     private val articleRoomDao: ArticleRoomDao
 ) : ArticlesDao {
-    override fun fetchAllBookmarkedArticles(): Single<List<Article>> =
-        articleRoomDao.fetchArticles()
-            .subscribeOn(Schedulers.io())
-            .flatMapObservable {
-                Observable.fromIterable(it)
-            }
-            .map {
-                // convert it to DomainRepresentation
-                it.toDomainRepresentation()
-            }
-            .toList()
-
     override suspend fun fetchBookmarkedArticles(page: Int): List<Article> {
         return withContext(Dispatchers.IO) {
             articleRoomDao
