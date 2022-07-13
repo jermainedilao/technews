@@ -22,7 +22,7 @@ jobs:
       env:
         KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
       run: |
-        cat $KEYSTORE_PROPERTIES
+        printenv KEYSTORE_PROPERTIES
         touch keystore.properties
         echo $KEYSTORE_PROPERTIES >> keystore.properties
         cat keystore.properties
@@ -31,7 +31,7 @@ jobs:
       env:
         BUILD_PROPERTIES: ${{ secrets.BUILD_PROPERTIES }}
       run: |
-        cat $BUILD_PROPERTIES
+        printenv BUILD_PROPERTIES
         touch build.properties
         echo $BUILD_PROPERTIES >> build.properties
         cat build.properties
