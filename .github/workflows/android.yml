@@ -35,6 +35,12 @@ jobs:
         touch build.properties
         echo "$BUILD_PROPERTIES" >> build.properties
         cat build.properties
+        
+    - name: Decode Keystore
+      env:
+        ENCODED_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 }}
+      run: |
+        echo $ENCODED_KEYSTORE | base64 -di > technews.jks
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
