@@ -24,7 +24,7 @@ jobs:
       run: |
         printenv KEYSTORE_PROPERTIES
         touch keystore.properties
-        echo $KEYSTORE_PROPERTIES >> keystore.properties
+        echo "$KEYSTORE_PROPERTIES" >> keystore.properties
         cat keystore.properties
 
     - name: write build.properties file
@@ -33,7 +33,7 @@ jobs:
       run: |
         printenv BUILD_PROPERTIES
         touch build.properties
-        echo $BUILD_PROPERTIES >> build.properties
+        echo "$BUILD_PROPERTIES" >> build.properties
         cat build.properties
 
     - name: Grant execute permission for gradlew
