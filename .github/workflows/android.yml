@@ -42,7 +42,7 @@ jobs:
       env:
         ENCODED_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 }}
       run: |
-        echo $ENCODED_KEYSTORE | base64 -di > technews.jks
+        echo $ENCODED_KEYSTORE | base64 --decode > technews.jks
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
