@@ -33,12 +33,12 @@ android {
         enabled = true
     }
     signingConfigs {
-//        config {
-//            keyAlias keyStoreProperties['KEY_ALIAS']
-//            keyPassword keyStoreProperties['KEY_PASSWORD']
-//            storeFile file(keyStoreProperties['STORE_FILE'])
-//            storePassword keyStoreProperties['KEYSTORE_PASSWORD']
-//        }
+        config {
+            keyAlias keyStoreProperties['KEY_ALIAS']
+            keyPassword keyStoreProperties['KEY_PASSWORD']
+            storeFile file(keyStoreProperties['STORE_FILE'])
+            storePassword keyStoreProperties['KEYSTORE_PASSWORD']
+        }
     }
     compileSdkVersion AppConfig.compileSdkVersion
     defaultConfig {
