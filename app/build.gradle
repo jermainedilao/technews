@@ -54,7 +54,7 @@ android {
             applicationIdSuffix ".debug"
         }
         release {
-//            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
