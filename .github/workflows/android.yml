@@ -51,4 +51,4 @@ jobs:
       run: chmod +x gradlew
     
     - name: Build with Gradle
-      run: ./gradlew nexus5api30DebugAndroidTest -Pandroid.sdk.channel=3 -Pandroid.testoptions.manageddevices.emulator.gpu=“swiftshader_indirect”
+      run: ./gradlew nexus5api30DebugAndroidTest -Pandroid.sdk.channel=3 -Pandroid.testoptions.manageddevices.emulator.gpu=“swiftshader_indirect” -Dorg.gradle.workers.max=1
