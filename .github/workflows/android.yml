@@ -61,6 +61,7 @@ jobs:
       with:
         api-level: 30
         profile: Nexus 5
+        emulator-build: 7425822
         force-avd-creation: false
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
