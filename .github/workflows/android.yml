@@ -53,7 +53,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
-    - name: Build with Gradle
+    - name: Run UI Tests
       run: ./gradlew nexus5api30DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
 #    - name: Run UI Tests
