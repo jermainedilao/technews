@@ -77,8 +77,8 @@ And you're all set!
     * [ ] Un-bookmark from bookmarks list (needs observable queries)
     * [ ] Click an article
 * [x] Migrate to Paging 3
-* [ ] Observable queries (DB as single source of truth)
 * [ ] Migrate to coroutines (WIP)
+* [ ] Observable queries (DB as single source of truth)
 * [ ] Convert to MVI
 * [ ] Local pagination in Bookmarks screen
 * [ ] Add sources screen to allow users to pick news sources that they want.

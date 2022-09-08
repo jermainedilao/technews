@@ -13,8 +13,6 @@ android {
     defaultConfig {
         minSdkVersion AppConfig.minSdkVersion
         targetSdkVersion AppConfig.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
 
         buildConfigField "String", "NEWS_API_KEY", buildProperties['NEWS_API_KEY']
 
