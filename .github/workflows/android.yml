@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -54,7 +54,7 @@ jobs:
       run: chmod +x gradlew
     
     - name: Run UI Tests
-      run: ./gradlew nexus5api30DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.sdk.channel=3 -Dorg.gradle.workers.max=1
+      run: ./gradlew nexus5api30DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.sdk.channel=3
 
 #    - name: Run UI Tests
 #      uses: reactivecircus/android-emulator-runner@v2
